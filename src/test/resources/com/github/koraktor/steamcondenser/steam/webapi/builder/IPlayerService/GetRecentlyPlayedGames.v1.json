@@ -1,0 +1,72 @@
+{
+	"response": {
+		"total_count": 8,
+		"games": [
+			{
+				"appid": 214360,
+				"name": "Tower Wars",
+				"playtime_2weeks": 1615,
+				"playtime_forever": 24544,
+				"img_icon_url": "b9eba47bca28bb79559f599925ffec4ffd817e97",
+				"img_logo_url": "4c0065c5489898d092bf778632529efcab3a8b1e"
+			},
+			{
+				"appid": 24240,
+				"name": "PAYDAY: The Heist",
+				"playtime_2weeks": 1280,
+				"playtime_forever": 2189,
+				"img_icon_url": "a07ceea8808f1a2104ed1c864756f263ec67df49",
+				"img_logo_url": "985cce1caab10e5b5f11af73c75fe0c5411ed76a"
+			},
+			{
+				"appid": 230050,
+				"name": "DLC Quest",
+				"playtime_2weeks": 487,
+				"playtime_forever": 487,
+				"img_icon_url": "536d9d40797d6b19c1e010b27b42c4ebf405472c",
+				"img_logo_url": "0dfb5f55501d52def13dea3a2987eee8781a5d7c"
+			},
+			{
+				"appid": 240,
+				"name": "Counter-Strike: Source",
+				"playtime_2weeks": 319,
+				"playtime_forever": 481,
+				"img_icon_url": "9052fa60c496a1c03383b27687ec50f4bf0f0e10",
+				"img_logo_url": "ee97d0dbf3e5d5d59e69dc20b98ed9dc8cad5283"
+			},
+			{
+				"appid": 212680,
+				"name": "FTL: Faster Than Light",
+				"playtime_2weeks": 261,
+				"playtime_forever": 1337,
+				"img_icon_url": "e8770ddb95fde0804694b116dfe3479f5a65900d",
+				"img_logo_url": "975193db5ca8cc2a4c969cea8f80d93157264ec1"
+			},
+			{
+				"appid": 440,
+				"name": "Team Fortress 2",
+				"playtime_2weeks": 53,
+				"playtime_forever": 11925,
+				"img_icon_url": "e3f595a92552da3d664ad00277fad2107345f743",
+				"img_logo_url": "07385eb55b5ba974aebbe74d3c99626bda7920b8"
+			},
+			{
+				"appid": 233740,
+				"name": "Organ Trail: Director's Cut",
+				"playtime_2weeks": 49,
+				"playtime_forever": 49,
+				"img_icon_url": "b2ae5274b8ea39e7db518436e0883f54c0f5ebb9",
+				"img_logo_url": "f9bb211db5bd5f52dd4d80f612027922393fa739"
+			},
+			{
+				"appid": 108700,
+				"name": "Death Rally",
+				"playtime_2weeks": 10,
+				"playtime_forever": 1153,
+				"img_icon_url": "d0e222802774e820d37ed81416c22c91d5f4bd1d",
+				"img_logo_url": "4b7d97eb1b07402e811def710c5800990f3ed3a3"
+			}
+		]
+		
+	}
+}
