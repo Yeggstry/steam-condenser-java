@@ -49,4 +49,24 @@ public class IPlayerService {
 		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetRecentlyPlayedGames", 1, params);
 		return playerServiceBuilder.buildRecentlyPlayedGames(data);
 	}
+
+	public OwnedGames getOwnedGames(long steamId) throws WebApiException, JSONException {
+		JSONObject data = callGetOwnedGamesMethod(steamId, false, false);
+		return playerServiceBuilder.buildOwnedGames(data);
+	}
+	
+	//support for the "appids_filter" parameters has not been included, 
+	public OwnedGames getOwnedGames(long steamId, boolean includeAppInfo, boolean includePlayedFreeGames) throws WebApiException, JSONException {
+		JSONObject data = callGetOwnedGamesMethod(steamId, includeAppInfo, includePlayedFreeGames);
+		return playerServiceBuilder.buildOwnedGamesWithAppInfo(data);
+	}
+	
+	private JSONObject callGetOwnedGamesMethod(long steamId, boolean includeAppInfo, boolean includePlayedFreeGames) throws WebApiException, JSONException {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(steamId));
+		params.put("include_appinfo", new Integer(includeAppInfo ? 1 : 0));
+		params.put("include_played_free_games", new Integer(includePlayedFreeGames ? 1 : 0));		
+
+		return WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetOwnedGames", 1, params);
+	}
 }

@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGame;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGameWithAppInfo;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.steam.webapi.exceptions.ParseException;
@@ -36,6 +37,45 @@ public class PlayerServiceBuilder {
 			List<OwnedGameWithAppInfo> recentlyPlayedGamesList = buildOwnedGameListWithAppInfo(gamesData);
 			OwnedGames recentlyPlayedGames = new OwnedGames(totalCount, recentlyPlayedGamesList);
     		return recentlyPlayedGames;
+        } catch(JSONException e) {
+            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
+	}
+
+	public OwnedGames buildOwnedGames(JSONObject data) throws ParseException {
+        try {
+        	int gameCount = data.getJSONObject("response").getInt("game_count");
+        	JSONArray gamesData = data.getJSONObject("response").getJSONArray("games");
+        	List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
+            for(int i = 0; i < gamesData.length(); i ++) {
+                JSONObject ownedGameData = gamesData.getJSONObject(i);
+                long appId = ownedGameData.getLong("appid");
+                long playtime2Weeks;
+                if(ownedGameData.has("playtime_2weeks")) {
+                	playtime2Weeks = ownedGameData.getLong("playtime_2weeks");
+                }else{
+                	playtime2Weeks = 0;
+                }
+                long playtimeForever = ownedGameData.getLong("playtime_forever");
+                
+                OwnedGame playerOwnedGame = new OwnedGame(appId, playtime2Weeks, playtimeForever);
+                ownedGamesList.add(playerOwnedGame);
+            }
+            OwnedGames playerOwnedGames = new OwnedGames(gameCount, ownedGamesList);
+    		return playerOwnedGames;
+        } catch(JSONException e) {
+            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
+	}
+
+	public OwnedGames buildOwnedGamesWithAppInfo(JSONObject data) throws ParseException {
+        try {
+        	int gameCount = data.getJSONObject("response").getInt("game_count");
+        	JSONArray gamesData = data.getJSONObject("response").getJSONArray("games");
+
+			List<OwnedGameWithAppInfo> ownedGamesList = buildOwnedGameListWithAppInfo(gamesData);
+            OwnedGames ownedGames = new OwnedGames(gameCount, ownedGamesList);
+    		return ownedGames;
         } catch(JSONException e) {
             throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }

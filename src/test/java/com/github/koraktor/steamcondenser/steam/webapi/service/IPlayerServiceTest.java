@@ -81,4 +81,41 @@ public class IPlayerServiceTest {
 		
 		verify(playerServiceBuilder).buildRecentlyPlayedGames(recentlyPlayedGamesDocument);
 	}
+	
+	/* Tests for GetOwnedGames */
+	@Test
+	public void testGetOwnedGames() throws WebApiException, JSONException, IOException {
+		JSONObject ownedGamesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(STEAM_ID));
+		params.put("include_appinfo", new Integer(0));
+		params.put("include_played_free_games", new Integer(0));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetOwnedGames", 1, params)).thenReturn(ownedGamesDocument);
+
+		OwnedGames playerOwnedGames = mock(OwnedGames.class);
+		when(playerServiceBuilder.buildOwnedGames(ownedGamesDocument)).thenReturn(playerOwnedGames);
+
+		iplayerService.getOwnedGames(STEAM_ID);
+		
+		verify(playerServiceBuilder).buildOwnedGames(ownedGamesDocument);
+	}
+
+	@Test
+	public void testGetOwnedGamesWithAppInfo() throws WebApiException, JSONException, IOException {
+		JSONObject ownedGamesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(STEAM_ID));
+		params.put("include_appinfo", new Integer(1));
+		params.put("include_played_free_games", new Integer(1));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetOwnedGames", 1, params)).thenReturn(ownedGamesDocument);
+
+		OwnedGames playerOwnedGames = mock(OwnedGames.class);
+		when(playerServiceBuilder.buildOwnedGamesWithAppInfo(ownedGamesDocument)).thenReturn(playerOwnedGames);
+
+		iplayerService.getOwnedGames(STEAM_ID, true, true);
+		
+		verify(playerServiceBuilder).buildOwnedGamesWithAppInfo(ownedGamesDocument);
+	}
 }

@@ -8,6 +8,7 @@
 package com.github.koraktor.steamcondenser.steam.webapi.builder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGame;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGameWithAppInfo;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.steam.webapi.exceptions.ParseException;
@@ -81,6 +83,85 @@ public class PlayerServiceBuilderTest {
 		try {
 			playerServiceBuilder.buildRecentlyPlayedGames(recentlyPlayedGamesDocument);
 			fail("Exception should be thrown when calling build recently played games with invalid JSON.");
+		} catch (Exception e) {
+			assertEquals("Could not parse JSON data.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testOwnedGames() throws JSONException, IOException, ParseException {
+		JSONObject ownedGamesDocument = new JSONObject(loadFileAsString("IPlayerService/GetOwnedGames.v1.json"));
+		
+		OwnedGames ownedGames = playerServiceBuilder.buildOwnedGames(ownedGamesDocument);
+		
+		assertEquals(118, ownedGames.getGameCount());
+
+		assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+		List<OwnedGame> ownedGamesList = ownedGames.getPlayerOwnedGames();
+		assertEquals(118, ownedGamesList.size());
+		
+		OwnedGame ownedGamedNotPlayedWithinLastTwoWeeks = ownedGamesList.get(0);
+
+		assertEquals(220, ownedGamedNotPlayedWithinLastTwoWeeks.getAppId());
+		assertEquals(0, ownedGamedNotPlayedWithinLastTwoWeeks.getPlaytime2Weeks());
+		assertEquals(139, ownedGamedNotPlayedWithinLastTwoWeeks.getPlaytimeForever());
+		
+		OwnedGame ownedGamedPlayedWithinLastTwoWeeks = ownedGamesList.get(51);
+		assertEquals(31280, ownedGamedPlayedWithinLastTwoWeeks.getAppId());
+		assertEquals(46, ownedGamedPlayedWithinLastTwoWeeks.getPlaytime2Weeks());
+		assertEquals(2310, ownedGamedPlayedWithinLastTwoWeeks.getPlaytimeForever());
+	}
+
+	@Test
+	public void testOwnedGamesInvalidJSON() throws JSONException {
+		JSONObject recentlyPlayedGamesDocument = new JSONObject("{ }");
+
+		try {
+			playerServiceBuilder.buildOwnedGames(recentlyPlayedGamesDocument);
+			fail("Exception should be thrown when calling build owned games with invalid JSON.");
+		} catch (Exception e) {
+			assertEquals("Could not parse JSON data.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testOwnedGamesWithAppInfo() throws JSONException, IOException, ParseException {
+		JSONObject ownedGamesDocument = new JSONObject(loadFileAsString("IPlayerService/GetOwnedGames.include_app_info.v1.json"));
+		
+		OwnedGames ownedGames = playerServiceBuilder.buildOwnedGamesWithAppInfo(ownedGamesDocument);
+		
+		assertEquals(123, ownedGames.getGameCount());
+
+		assertTrue(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+		List<OwnedGameWithAppInfo> ownedGamesList = ownedGames.getPlayerOwnedGamesWithAppInfo();
+		assertEquals(123, ownedGamesList.size());
+		
+		OwnedGameWithAppInfo ownedGamedNotPlayedWithinLastTwoWeeks = ownedGamesList.get(0);
+
+		assertEquals(220, ownedGamedNotPlayedWithinLastTwoWeeks.getAppId());
+		assertEquals(0, ownedGamedNotPlayedWithinLastTwoWeeks.getPlaytime2Weeks());
+		assertEquals(139, ownedGamedNotPlayedWithinLastTwoWeeks.getPlaytimeForever());
+		assertEquals("Half-Life 2", ownedGamedNotPlayedWithinLastTwoWeeks.getName());
+		assertEquals("fcfb366051782b8ebf2aa297f3b746395858cb62", ownedGamedNotPlayedWithinLastTwoWeeks.getIconUrl());
+		assertEquals("e4ad9cf1b7dc8475c1118625daf9abd4bdcbcad0", ownedGamedNotPlayedWithinLastTwoWeeks.getLogoUrl());
+
+		
+		OwnedGameWithAppInfo ownedGamedPlayedWithinLastTwoWeeks = ownedGamesList.get(51);
+		assertEquals(31280, ownedGamedPlayedWithinLastTwoWeeks.getAppId());
+		assertEquals(46, ownedGamedPlayedWithinLastTwoWeeks.getPlaytime2Weeks());
+		assertEquals(2310, ownedGamedPlayedWithinLastTwoWeeks.getPlaytimeForever());
+		assertEquals("Poker Night at the Inventory", ownedGamedPlayedWithinLastTwoWeeks.getName());
+		assertEquals("7d50bd1f5e7cfe68397e9ca0041836ad18153dfb", ownedGamedPlayedWithinLastTwoWeeks.getIconUrl());
+		assertEquals("d962cde096bca06ee10d09880e9f3d6257941161", ownedGamedPlayedWithinLastTwoWeeks.getLogoUrl());
+	}
+
+	@Test
+	public void testOwnedGamesWithAppInfoInvalidJSON() throws JSONException {
+		JSONObject recentlyPlayedGamesDocument = new JSONObject("{ }");
+
+		try {
+			playerServiceBuilder.buildOwnedGamesWithAppInfo(recentlyPlayedGamesDocument);
+			fail("Exception should be thrown when calling build owned games with invalid JSON.");
 		} catch (Exception e) {
 			assertEquals("Could not parse JSON data.", e.getMessage());
 		}
