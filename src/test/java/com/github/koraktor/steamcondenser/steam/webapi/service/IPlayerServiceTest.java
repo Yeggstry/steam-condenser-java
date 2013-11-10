@@ -7,14 +7,20 @@
 
 package com.github.koraktor.steamcondenser.steam.webapi.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -45,6 +51,12 @@ public class IPlayerServiceTest {
         playerServiceBuilder = mock(PlayerServiceBuilder.class);
 		iplayerService = new IPlayerService(playerServiceBuilder);
         mockStatic(WebApi.class);
+	}
+
+	private String loadFileAsString(String path) throws IOException {
+		URL resource = this.getClass().getResource(path);
+		File resourceFile = new File(resource.getFile());
+		return FileUtils.readFileToString(resourceFile, "UTF-8");
 	}
 
 	/* Tests for GetRecentlyPlayedGames */
@@ -117,5 +129,17 @@ public class IPlayerServiceTest {
 		iplayerService.getOwnedGames(STEAM_ID, true, true);
 		
 		verify(playerServiceBuilder).buildOwnedGamesWithAppInfo(ownedGamesDocument);
+	}
+
+	/* Tests for GetSteamLevel */
+	@Test
+	public void testGetSteamLevel() throws WebApiException, JSONException, IOException {
+		JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("IPlayerService/GetSteamLevel.v1.json"));
+		Map<String, Object> params = Collections.<String,Object>singletonMap("steamid", Long.toString(STEAM_ID));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetSteamLevel", 1, params)).thenReturn(numberOfPlayersDocument);
+
+		int playerLevel = iplayerService.getSteamLevel(STEAM_ID);
+		assertEquals(12, playerLevel);
 	}
 }

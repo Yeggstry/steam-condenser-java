@@ -69,4 +69,11 @@ public class IPlayerService {
 
 		return WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetOwnedGames", 1, params);
 	}
+	
+	public int getSteamLevel(long steamId) throws WebApiException, JSONException {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(steamId));
+		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetSteamLevel", 1, params);
+		return data.getJSONObject("response").getInt("player_level");
+	}
 }
