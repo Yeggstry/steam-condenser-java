@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.steam.community.WebApi;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.steam.webapi.builder.PlayerServiceBuilder;
 
 /**
@@ -36,16 +37,16 @@ public class IPlayerService {
 		this.playerServiceBuilder = playerServiceBuilder;
 	}
 	
-	public int getRecentlyPlayedGames(long steamId) throws WebApiException, JSONException {
+	public OwnedGames getRecentlyPlayedGames(long steamId) throws WebApiException, JSONException {
 		return getRecentlyPlayedGames(steamId, 0);
 	}
 
-	public int getRecentlyPlayedGames(long steamId, int count) throws WebApiException, JSONException {
+	public OwnedGames getRecentlyPlayedGames(long steamId, int count) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(steamId));
 		params.put("count", Integer.toString(count));
 
 		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetRecentlyPlayedGames", 1, params);
-		return playerServiceBuilder.buildRecentlyPlayedGames(steamId, data);
+		return playerServiceBuilder.buildRecentlyPlayedGames(data);
 	}
 }
