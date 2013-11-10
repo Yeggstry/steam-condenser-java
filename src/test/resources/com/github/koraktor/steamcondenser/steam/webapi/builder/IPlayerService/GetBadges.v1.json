@@ -1,0 +1,91 @@
+{
+	"response": {
+		"badges": [
+			{
+				"badgeid": 14,
+				"level": 1,
+				"completion_time": 1372272848,
+				"xp": 100,
+				"scarcity": 1020314
+			},
+			{
+				"badgeid": 2,
+				"level": 2,
+				"completion_time": 1379775994,
+				"xp": 200,
+				"scarcity": 561399
+			},
+			{
+				"badgeid": 8,
+				"level": 1,
+				"completion_time": 1356340708,
+				"xp": 100,
+				"scarcity": 741879
+			},
+			{
+				"badgeid": 7,
+				"level": 2,
+				"completion_time": 1342295986,
+				"xp": 83,
+				"scarcity": 518390
+			},
+			{
+				"badgeid": 6,
+				"level": 11,
+				"completion_time": 1325186234,
+				"xp": 71,
+				"scarcity": 304794
+			},
+			{
+				"badgeid": 5,
+				"level": 5,
+				"completion_time": 1310403600,
+				"xp": 59,
+				"scarcity": 463835
+			},
+			{
+				"badgeid": 3,
+				"level": 8,
+				"completion_time": 1303058468,
+				"xp": 83,
+				"scarcity": 15205
+			},
+			{
+				"badgeid": 4,
+				"level": 2,
+				"completion_time": 1292794172,
+				"xp": 83,
+				"scarcity": 19294
+			},
+			{
+				"badgeid": 13,
+				"level": 121,
+				"completion_time": 1100798967,
+				"xp": 349,
+				"scarcity": 670024
+			},
+			{
+				"badgeid": 1,
+				"level": 8,
+				"completion_time": 1100798967,
+				"xp": 400,
+				"scarcity": 7103337
+			},
+			{
+				"badgeid": 1,
+				"appid": 245070,
+				"level": 1,
+				"completion_time": 1374406171,
+				"xp": 100,
+				"communityitemid": "110365220",
+				"border_color": 0,
+				"scarcity": 521893
+			}
+		]
+		,
+		"player_xp": 1628,
+		"player_level": 13,
+		"player_xp_needed_to_level_up": 172,
+		"player_xp_needed_current_level": 1600
+	}
+}
