@@ -8,15 +8,21 @@
 package com.github.koraktor.steamcondenser.steam.webapi.builder;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.steam.community.playerservice.AppBadge;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.Badge;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGame;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGameWithAppInfo;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.PlayerBadgeDetails;
 import com.github.koraktor.steamcondenser.steam.webapi.exceptions.ParseException;
 
 
@@ -102,5 +108,64 @@ public class PlayerServiceBuilder {
             ownedGamesListWithAppInfo.add(ownedGameWithAppInfo);
         }
 		return ownedGamesListWithAppInfo;
+	}
+
+	public PlayerBadgeDetails buildBadges(JSONObject data) throws ParseException {
+        try {
+        	JSONObject response = data.getJSONObject("response");
+        	long playerXp = response.getLong("player_xp");
+        	int playerLevel = response.getInt("player_level");
+        	long xpNeededToLevelUp = response.getLong("player_xp_needed_to_level_up");
+        	long xpNeededForCurrentLevel = response.getLong("player_xp_needed_current_level");
+        	
+        	PlayerBadgeDetails playerBadgeDetails = new PlayerBadgeDetails(playerXp, playerLevel, xpNeededToLevelUp, xpNeededForCurrentLevel); 
+        	
+        	List<Badge> badges = new ArrayList<Badge>();
+			JSONArray badgesData = response.getJSONArray("badges");
+            for(int i = 0; i < badgesData.length(); i ++) {
+                JSONObject badgeData = badgesData.getJSONObject(i);
+                
+                Badge badge;
+                
+                long badgeId = badgeData.getLong("badgeid");
+                int level = badgeData.getInt("level");
+                Date completionTime = new java.util.Date(badgeData.getLong("completion_time")*1000);
+                int xp = badgeData.getInt("xp");
+                long scarcity = badgeData.getLong("scarcity");
+                
+                if(badgeData.has("appid")) {
+                    long appId = badgeData.getLong("appid");
+                    long communityItemId = badgeData.getLong("communityitemid");
+                    long borderColor = badgeData.getLong("border_color");
+                	
+                    badge = new AppBadge(badgeId, level, completionTime, xp, scarcity, appId, communityItemId, borderColor);
+                }else{
+                    badge = new Badge(badgeId, level, completionTime, xp, scarcity);
+                }
+                
+   				badges.add(badge);
+            }
+            
+            playerBadgeDetails.setBadges(badges);
+    		return playerBadgeDetails;
+        } catch(JSONException e) {
+            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
+	}
+
+	public Map<Long, Boolean> buildCommunityBadgesProgress(JSONObject data) throws ParseException {
+        try {
+        	Map<Long, Boolean> communityBadgeProgress = new HashMap<Long, Boolean>();
+        	JSONArray badgeProgressData = data.getJSONObject("response").getJSONArray("quests");
+            for(int i = 0; i < badgeProgressData.length(); i ++) {
+                JSONObject questData = badgeProgressData.getJSONObject(i);
+                Long questId = questData.getLong("questid");
+                Boolean completed = questData.getBoolean("completed");
+                communityBadgeProgress.put(questId, completed);
+            }
+    		return communityBadgeProgress;
+        } catch(JSONException e) {
+            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
 	}
 }

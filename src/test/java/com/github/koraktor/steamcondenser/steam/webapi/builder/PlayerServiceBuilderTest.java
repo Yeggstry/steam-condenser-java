@@ -15,7 +15,9 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -23,9 +25,12 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.koraktor.steamcondenser.steam.community.playerservice.AppBadge;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.Badge;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGame;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGameWithAppInfo;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.PlayerBadgeDetails;
 import com.github.koraktor.steamcondenser.steam.webapi.exceptions.ParseException;
 
 /**
@@ -162,6 +167,67 @@ public class PlayerServiceBuilderTest {
 		try {
 			playerServiceBuilder.buildOwnedGamesWithAppInfo(recentlyPlayedGamesDocument);
 			fail("Exception should be thrown when calling build owned games with invalid JSON.");
+		} catch (Exception e) {
+			assertEquals("Could not parse JSON data.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testBuildBadges() throws JSONException, IOException, ParseException {
+		JSONObject badgesDocument = new JSONObject(loadFileAsString("IPlayerService/GetBadges.v1.json"));
+		
+		PlayerBadgeDetails playerBadgeDetails = playerServiceBuilder.buildBadges(badgesDocument);
+		
+		assertEquals(1628, playerBadgeDetails.getCurrentXp());
+		assertEquals(13, playerBadgeDetails.getLevel());
+		assertEquals(172, playerBadgeDetails.getXpNeededToLevelUp());
+		assertEquals(1600, playerBadgeDetails.getXpNeededForCurrentLevel());
+		
+		assertEquals(11, playerBadgeDetails.getBadges().size());
+		Badge generalBadge = playerBadgeDetails.getBadges().get(2);
+		assertEquals(8, generalBadge.getBadgeId());
+		assertEquals(1, generalBadge.getLevel());
+		assertEquals(new Date(1356340708000L), generalBadge.getCompletionTime());
+		assertEquals(100, generalBadge.getXp());
+		assertEquals(741879, generalBadge.getScarcity());
+
+		AppBadge badgeWithAppDetails = (AppBadge) playerBadgeDetails.getBadges().get(10);
+		assertEquals(245070, badgeWithAppDetails.getAppId());
+		assertEquals(110365220, badgeWithAppDetails.getCommunityItemId());
+		assertEquals(0, badgeWithAppDetails.getBorderColor());
+	}
+	
+	@Test
+	public void testBuildBadgesInvalidJSON() throws JSONException {
+		JSONObject badgesDocument = new JSONObject("{ }");
+
+		try {
+			playerServiceBuilder.buildBadges(badgesDocument);
+			fail("Exception should be thrown when calling build community badges progress with invalid JSON.");
+		} catch (Exception e) {
+			assertEquals("Could not parse JSON data.", e.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void testBuildCommunityBadgesProgress() throws JSONException, IOException, ParseException {
+		JSONObject communityBadgesProgressDocument = new JSONObject(loadFileAsString("IPlayerService/GetCommunityBadgesProgress.v1.json"));
+		
+		Map<Long, Boolean> communityBadgesProgress = playerServiceBuilder.buildCommunityBadgesProgress(communityBadgesProgressDocument);
+		
+		assertEquals(26, communityBadgesProgress.size());
+		assertTrue(communityBadgesProgress.get(103L));
+		assertFalse(communityBadgesProgress.get(106L));
+	}
+	
+	@Test
+	public void testBuildCommunityBadgesProgressInvalidJSON() throws JSONException {
+		JSONObject communityBadgesProgressDocument = new JSONObject("{ }");
+
+		try {
+			playerServiceBuilder.buildCommunityBadgesProgress(communityBadgesProgressDocument);
+			fail("Exception should be thrown when calling build community badges progress with invalid JSON.");
 		} catch (Exception e) {
 			assertEquals("Could not parse JSON data.", e.getMessage());
 		}

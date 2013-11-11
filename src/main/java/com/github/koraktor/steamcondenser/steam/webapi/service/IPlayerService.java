@@ -8,6 +8,7 @@
 package com.github.koraktor.steamcondenser.steam.webapi.service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.steam.community.WebApi;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.PlayerBadgeDetails;
 import com.github.koraktor.steamcondenser.steam.webapi.builder.PlayerServiceBuilder;
 
 /**
@@ -75,5 +77,27 @@ public class IPlayerService {
 		params.put("steamid", Long.toString(steamId));
 		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetSteamLevel", 1, params);
 		return data.getJSONObject("response").getInt("player_level");
+	}
+
+	public PlayerBadgeDetails getBadges(long steamId) throws WebApiException, JSONException {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(steamId));
+		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetBadges", 1, params);
+		return playerServiceBuilder.buildBadges(data);
+	}
+
+	public Map<Long, Boolean> getCommunityBadgeProgress(long steamId) throws WebApiException, JSONException {
+		return getCommunityBadgeProgress(steamId, -1);
+	}
+
+	public Map<Long, Boolean> getCommunityBadgeProgress(long steamId, long badgeId) throws WebApiException, JSONException {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(steamId));
+		if(badgeId > -1) {
+			params.put("badgeid", Long.toString(badgeId));
+		}
+
+		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetCommunityBadgeProgress", 1, params);
+		return playerServiceBuilder.buildCommunityBadgesProgress(data);
 	}
 }

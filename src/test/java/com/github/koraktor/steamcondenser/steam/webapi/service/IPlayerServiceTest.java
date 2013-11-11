@@ -32,7 +32,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.steam.community.WebApi;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
+import com.github.koraktor.steamcondenser.steam.community.playerservice.PlayerBadgeDetails;
 import com.github.koraktor.steamcondenser.steam.webapi.builder.PlayerServiceBuilder;
+import com.github.koraktor.steamcondenser.steam.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.steam.webapi.exceptions.ParseException;
 
 /**
  * @author Lewis Keen
@@ -141,5 +144,59 @@ public class IPlayerServiceTest {
 
 		int playerLevel = iplayerService.getSteamLevel(STEAM_ID);
 		assertEquals(12, playerLevel);
+	}
+
+	/* Tests for GetBadges */
+	@Test
+	public void testGetBadges() throws WebApiException, JSONException, ParseException, DataException {
+		JSONObject badgesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(STEAM_ID));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetBadges", 1, params)).thenReturn(badgesDocument);
+
+		PlayerBadgeDetails playerBadgeDetails = mock(PlayerBadgeDetails.class);
+		when(playerServiceBuilder.buildBadges(badgesDocument)).thenReturn(playerBadgeDetails);
+
+		iplayerService.getBadges(STEAM_ID);
+		
+		verify(playerServiceBuilder).buildBadges(badgesDocument);
+	}
+
+	/* Tests for GetCommunityBadgeProgress */
+	@Test
+	public void testGetCommunityBadgeProgress() throws WebApiException, JSONException, ParseException, DataException {
+		JSONObject communityBadgeProgressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(STEAM_ID));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetCommunityBadgeProgress", 1, params)).thenReturn(communityBadgeProgressDocument);
+
+		@SuppressWarnings("unchecked")
+		Map<Long, Boolean> communityBadgeProgress = mock(Map.class);
+		when(playerServiceBuilder.buildCommunityBadgesProgress(communityBadgeProgressDocument)).thenReturn(communityBadgeProgress);
+
+		iplayerService.getCommunityBadgeProgress(STEAM_ID);
+		
+		verify(playerServiceBuilder).buildCommunityBadgesProgress(communityBadgeProgressDocument);
+	}
+
+	/* Tests for GetCommunityBadgeProgress */
+	@Test
+	public void testGetCommunityBadgeProgressWithBadgeId() throws WebApiException, JSONException, ParseException, DataException {
+		JSONObject communityBadgeProgressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("steamid", Long.toString(STEAM_ID));
+		params.put("badgeid", Integer.toString(8));
+
+		when(WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetCommunityBadgeProgress", 1, params)).thenReturn(communityBadgeProgressDocument);
+
+		@SuppressWarnings("unchecked")
+		Map<Long, Boolean> communityBadgeProgress = mock(Map.class);
+		when(playerServiceBuilder.buildCommunityBadgesProgress(communityBadgeProgressDocument)).thenReturn(communityBadgeProgress);
+
+		iplayerService.getCommunityBadgeProgress(STEAM_ID, 8);
+		
+		verify(playerServiceBuilder).buildCommunityBadgesProgress(communityBadgeProgressDocument);
 	}
 }
