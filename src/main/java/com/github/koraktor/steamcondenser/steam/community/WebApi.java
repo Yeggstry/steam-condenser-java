@@ -2,7 +2,7 @@
  * This code is free software; you can redistribute it and/or modify it under
  * the terms of the new BSD License.
  *
- * Copyright (c) 2010-2011, Sebastian Staudt
+ * Copyright (c) 2010-2013, Sebastian Staudt
  */
 
 package com.github.koraktor.steamcondenser.steam.community;
@@ -36,6 +36,8 @@ abstract public class WebApi {
 
     protected static String apiKey;
 
+    protected static boolean secure = true;
+
     /**
      * Returns the Steam Web API key currently used by Steam Condenser
      *
@@ -59,6 +61,15 @@ abstract public class WebApi {
         }
 
         WebApi.apiKey = apiKey;
+    }
+
+    /**
+     * Sets whether HTTPS should be used for the communication with the Web API
+     *
+     * @param secure Whether to use HTTPS
+     */
+    public static void setSecure(boolean secure) {
+        WebApi.secure = secure;
     }
 
     /**
@@ -200,6 +211,27 @@ abstract public class WebApi {
         
 
     /**
+     * Fetches the JSON data from Steam Web API using the specified interface,
+     * method and version. Additional parameters are supplied via HTTP GET.
+     * Returns the complete response in JSON format.
+     *
+     * @param apiInterface The Web API interface to call, e.g.
+     *                     <code>ISteamUser</code>
+     * @param method The Web API method to call, e.g.
+     *               <code>GetPlayerSummaries</code>
+     * @param version The API method version to use
+     * @param params Additional parameters to supply via HTTP GET
+     * @return Data is returned as a <code>JSONObject</code>
+     * @throws JSONException In case of misformatted JSON data
+     * @throws WebApiException In case of any request failure
+     */
+    public static JSONObject getJSONResponse(String apiInterface, String method, int version, Map<String, Object> params)
+    		throws JSONException, WebApiException {
+        String data = getJSON(apiInterface, method, version, params);
+        return new JSONObject(data);
+    }
+
+    /**
      * Fetches data from Steam Web API using the specified interface, method
      * and version. Additional parameters are supplied via HTTP GET. Data is
      * returned as a String in the given format.
@@ -256,7 +288,8 @@ abstract public class WebApi {
      */
     public static String load(String format, String apiInterface, String method, int version, Map<String, Object> params)
             throws WebApiException {
-        String url = String.format("http://api.steampowered.com/%s/%s/v%04d/?", apiInterface, method, version);
+        String protocol = secure ? "https" : "http";
+        String url = String.format("%s://api.steampowered.com/%s/%s/v%04d/?", protocol, apiInterface, method, version);
 
         if(params == null) {
             params = new HashMap<String, Object>();
@@ -275,7 +308,7 @@ abstract public class WebApi {
             url += String.format("%s=%s", param.getKey(), param.getValue());
         }
 
-        LOG.info("Querying Steam Web API: " + url);
+        LOG.info("Querying Steam Web API: " + url.replace(apiKey, "SECRET"));
 
         String data;
         try {

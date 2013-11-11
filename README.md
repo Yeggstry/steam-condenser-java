@@ -1,6 +1,8 @@
 Steam Condenser
 ===============
 
+[![Build Status](https://secure.travis-ci.org/koraktor/steam-condenser-java.png)](http://travis-ci.org/koraktor/steam-condenser-java)
+
 The Steam Condenser is a multi-language library for querying the Steam
 Community, Source and GoldSrc game servers as well as the Steam master servers.
 Currently it is implemented in Java, PHP and Ruby.
@@ -14,7 +16,7 @@ The following Java libraries are required:
 
 * Apache Commons Compress (for Source servers sending compressed responses)
 * Apache Commons Lang 3
-* Jakarta Commons HTTPClient (for the Web API features)
+* Apache Commons HttpClient (for the Web API features)
 * JSON (for the Web API features)
 * JUnit (for testing)
 * PowerMock (for testing)
@@ -46,11 +48,12 @@ included LICENSE file.
 
 ## See Also
 
-* [Steam Condenser home](https://koraktor.de/steam-condenser)
+* [Steam Condenser home](http://koraktor.de/steam-condenser)
 * [GitHub project page](https://github.com/koraktor/steam-condenser)
 * [Wiki](https://github.com/koraktor/steam-condenser/wiki)
 * [Google group](http://groups.google.com/group/steam-condenser)
 * [Ohloh profile](http://www.ohloh.net/projects/steam-condenser)
 
-Follow Steam Condenser on Twitter
-[@steamcondenser](http://twitter.com/steamcondenser).
+Follow Steam Condenser on Google Plus+ via
+[+Steam Condenser](https://plus.google.com/b/109400543549250623875/109400543549250623875)
+or on Twitter via [@steamcondenser](https://twitter.com/steamcondenser).
