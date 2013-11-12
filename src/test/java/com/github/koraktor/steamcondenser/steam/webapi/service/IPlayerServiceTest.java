@@ -29,8 +29,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
-import com.github.koraktor.steamcondenser.steam.community.WebApi;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.steam.community.playerservice.PlayerBadgeDetails;
 import com.github.koraktor.steamcondenser.steam.webapi.builder.PlayerServiceBuilder;

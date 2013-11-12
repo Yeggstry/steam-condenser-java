@@ -14,8 +14,8 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
-import com.github.koraktor.steamcondenser.steam.community.WebApi;
 import com.github.koraktor.steamcondenser.steam.community.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.steam.community.apps.UpToDateCheck;
 import com.github.koraktor.steamcondenser.steam.webapi.builder.AppsBuilder;
