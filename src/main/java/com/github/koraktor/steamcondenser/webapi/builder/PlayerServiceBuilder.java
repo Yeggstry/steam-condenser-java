@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.playerservice.AppBadge;
 import com.github.koraktor.steamcondenser.webapi.playerservice.Badge;
@@ -33,25 +34,25 @@ import com.github.koraktor.steamcondenser.webapi.playerservice.PlayerBadgeDetail
  * @author Sebastian Staudt
  */
 public class PlayerServiceBuilder {
-	private static final String ERR_COULD_NOT_PARSE_JSON_DATA = "Could not parse JSON data.";
-
 	public OwnedGames buildRecentlyPlayedGames(JSONObject data) throws ParseException {
         try {
-        	int totalCount = data.getJSONObject("response").getInt("total_count");
-        	JSONArray gamesData = data.getJSONObject("response").getJSONArray("games");
+        	JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
+			int totalCount = responseObject.getInt("total_count");
+        	JSONArray gamesData = responseObject.getJSONArray("games");
 
 			List<OwnedGameWithAppInfo> recentlyPlayedGamesList = buildOwnedGameListWithAppInfo(gamesData);
 			OwnedGames recentlyPlayedGames = new OwnedGames(totalCount, recentlyPlayedGamesList);
     		return recentlyPlayedGames;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
 	public OwnedGames buildOwnedGames(JSONObject data) throws ParseException {
         try {
-        	int gameCount = data.getJSONObject("response").getInt("game_count");
-        	JSONArray gamesData = data.getJSONObject("response").getJSONArray("games");
+        	JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
+        	int gameCount = responseObject.getInt("game_count");
+        	JSONArray gamesData = responseObject.getJSONArray("games");
         	List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
             for(int i = 0; i < gamesData.length(); i ++) {
                 JSONObject ownedGameData = gamesData.getJSONObject(i);
@@ -70,20 +71,21 @@ public class PlayerServiceBuilder {
             OwnedGames playerOwnedGames = new OwnedGames(gameCount, ownedGamesList);
     		return playerOwnedGames;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
 	public OwnedGames buildOwnedGamesWithAppInfo(JSONObject data) throws ParseException {
         try {
-        	int gameCount = data.getJSONObject("response").getInt("game_count");
-        	JSONArray gamesData = data.getJSONObject("response").getJSONArray("games");
+        	JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
+        	int gameCount = responseObject.getInt("game_count");
+        	JSONArray gamesData = responseObject.getJSONArray("games");
 
 			List<OwnedGameWithAppInfo> ownedGamesList = buildOwnedGameListWithAppInfo(gamesData);
             OwnedGames ownedGames = new OwnedGames(gameCount, ownedGamesList);
     		return ownedGames;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
@@ -112,16 +114,16 @@ public class PlayerServiceBuilder {
 
 	public PlayerBadgeDetails buildBadges(JSONObject data) throws ParseException {
         try {
-        	JSONObject response = data.getJSONObject("response");
-        	long playerXp = response.getLong("player_xp");
-        	int playerLevel = response.getInt("player_level");
-        	long xpNeededToLevelUp = response.getLong("player_xp_needed_to_level_up");
-        	long xpNeededForCurrentLevel = response.getLong("player_xp_needed_current_level");
+        	JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
+        	long playerXp = responseObject.getLong("player_xp");
+        	int playerLevel = responseObject.getInt("player_level");
+        	long xpNeededToLevelUp = responseObject.getLong("player_xp_needed_to_level_up");
+        	long xpNeededForCurrentLevel = responseObject.getLong("player_xp_needed_current_level");
         	
         	PlayerBadgeDetails playerBadgeDetails = new PlayerBadgeDetails(playerXp, playerLevel, xpNeededToLevelUp, xpNeededForCurrentLevel); 
         	
         	List<Badge> badges = new ArrayList<Badge>();
-			JSONArray badgesData = response.getJSONArray("badges");
+			JSONArray badgesData = responseObject.getJSONArray("badges");
             for(int i = 0; i < badgesData.length(); i ++) {
                 JSONObject badgeData = badgesData.getJSONObject(i);
                 
@@ -149,14 +151,14 @@ public class PlayerServiceBuilder {
             playerBadgeDetails.setBadges(badges);
     		return playerBadgeDetails;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
 	public Map<Long, Boolean> buildCommunityBadgesProgress(JSONObject data) throws ParseException {
         try {
         	Map<Long, Boolean> communityBadgeProgress = new HashMap<Long, Boolean>();
-        	JSONArray badgeProgressData = data.getJSONObject("response").getJSONArray("quests");
+        	JSONArray badgeProgressData = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getJSONArray("quests");
             for(int i = 0; i < badgeProgressData.length(); i ++) {
                 JSONObject questData = badgeProgressData.getJSONObject(i);
                 Long questId = questData.getLong("questid");
@@ -165,7 +167,7 @@ public class PlayerServiceBuilder {
             }
     		return communityBadgeProgress;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 }

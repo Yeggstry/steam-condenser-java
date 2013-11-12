@@ -28,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.webapi.apps.UpToDateCheck;
 import com.github.koraktor.steamcondenser.webapi.builder.AppsBuilder;
@@ -56,7 +57,7 @@ public class ISteamAppsTest {
     public void testGetAppList() throws JSONException, WebApiException, ParseException  {
 		JSONObject appListDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 
-		when(WebApi.getJSONResponse("ISteamApps", "GetAppList", 2, null)).thenReturn(appListDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_APP_LIST, 2, null)).thenReturn(appListDocument);
 
 		Map<Long, String> appList = new TreeMap<Long, String>();
 		when(appsBuilder.buildAppList(appListDocument)).thenReturn(appList);
@@ -73,7 +74,7 @@ public class ISteamAppsTest {
 		Map<String, Object> params = new HashMap<String, Object>(); 
 		params.put("appid", Integer.toString(440));
 		params.put("version", Integer.toString(1253));
-		when(WebApi.getJSONResponse("ISteamApps", "UpToDateCheck", 1, params)).thenReturn(upToDateCheckDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_UP_TO_DATE_CHECK, 1, params)).thenReturn(upToDateCheckDocument);
 
 		UpToDateCheck upToDateCheck = mock(UpToDateCheck.class);
 		when(appsBuilder.buildUpToDateCheck(440, 1253, upToDateCheckDocument)).thenReturn(upToDateCheck);
@@ -89,7 +90,7 @@ public class ISteamAppsTest {
 
 		Map<String, Object> params = new HashMap<String, Object>(); 
 		params.put("addr", TEST_IP);
-		when(WebApi.getJSONResponse("ISteamApps", "GetServersAtAddress", 1, params)).thenReturn(getServersAtAddressDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_SERVERS_AT_ADDRESS, 1, params)).thenReturn(getServersAtAddressDocument);
 
 		List<ServerAtAddress> serversAtAddress = new ArrayList<ServerAtAddress>();
 		when(appsBuilder.buildServersAtAddress(TEST_IP, getServersAtAddressDocument)).thenReturn(serversAtAddress);

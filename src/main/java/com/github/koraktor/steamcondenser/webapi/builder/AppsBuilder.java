@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.webapi.apps.UpToDateCheck;
 import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
@@ -28,10 +29,6 @@ import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
  * @author Sebastian Staudt
  */
 public class AppsBuilder {
-	private static final String JSON_ITEM_NAME = "name";
-
-	private static final String ERR_COULD_NOT_PARSE_JSON_DATA = "Could not parse JSON data.";
-
 	/**
 	 * Build a map of apps available in Steam, with the key as the appId and the value as the name of the app
 	 * 
@@ -45,11 +42,11 @@ public class AppsBuilder {
         	JSONArray appsData = data.getJSONObject("applist").getJSONArray("apps");
             for(int i = 0; i < appsData.length(); i ++) {
                 JSONObject achievementData = appsData.getJSONObject(i);
-                appList.put(achievementData.getLong("appid"), achievementData.getString(JSON_ITEM_NAME));
+                appList.put(achievementData.getLong("appid"), achievementData.getString(WebApiConstants.RESPONSE_ITEM_NAME));
             }
     		return appList;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 	
@@ -71,7 +68,7 @@ public class AppsBuilder {
         	Integer requiredVersion = null;
         	String message = null;
         	
-        	JSONObject response = data.getJSONObject("response");
+        	JSONObject response = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
         	upToDate = response.getBoolean("up_to_date");
         	versionIsListable = response.getBoolean("version_is_listable");
         	if(response.has("required_version")) {
@@ -82,7 +79,7 @@ public class AppsBuilder {
         	}
         	return new UpToDateCheck(appId, upToDate, versionIsListable, requiredVersion, message);
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
@@ -97,7 +94,7 @@ public class AppsBuilder {
 	 */
 	public List<ServerAtAddress> buildServersAtAddress(String ip, JSONObject data) throws DataException, ParseException {
         try {
-        	JSONObject response = data.getJSONObject("response");
+        	JSONObject response = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
         	if(!response.getBoolean("success")) {
 				throw new DataException(String.format("Invalid IP address: %s",ip));
         	}
@@ -122,7 +119,7 @@ public class AppsBuilder {
 			}
 			return serversAtAddress;
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 }

@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameAchievement;
@@ -33,14 +34,6 @@ import com.github.koraktor.steamcondenser.webapi.userstats.UserStats;
  * @author Sebastian Staudt
  */
 public class UserStatsBuilder {
-	private static final String JSON_ITEM_STATS = "stats";
-	private static final String JSON_ITEM_GAME_NAME = "gameName";
-	private static final String JSON_ITEM_NAME = "name";
-	private static final String JSON_ITEM_ACHIEVEMENTS = "achievements";
-
-	private static final String ERR_COULD_NOT_PARSE_JSON_DATA = "Could not parse JSON data.";
-
-	
 	/**
 	 * Builds an object representation of the Global Achievements of a particular app.
 	 * 
@@ -55,14 +48,14 @@ public class UserStatsBuilder {
 	public GlobalAchievements buildGlobalAchievements(int appId, JSONObject data) throws ParseException {
         try {
         	Map<String, Double> percentages = new TreeMap<String, Double>();
-        	JSONArray achievementsData = data.getJSONObject("achievementpercentages").getJSONArray(JSON_ITEM_ACHIEVEMENTS);
+        	JSONArray achievementsData = data.getJSONObject("achievementpercentages").getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
             for(int i = 0; i < achievementsData.length(); i ++) {
                 JSONObject achievementData = achievementsData.getJSONObject(i);
-                percentages.put(achievementData.getString(JSON_ITEM_NAME), achievementData.getDouble("percent"));
+                percentages.put(achievementData.getString(WebApiConstants.RESPONSE_ITEM_NAME), achievementData.getDouble("percent"));
             }
     		return new GlobalAchievements(appId, percentages);
         } catch(JSONException e) {
-            throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+            throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
 	}
 
@@ -86,12 +79,12 @@ public class UserStatsBuilder {
 			if(!playerstatsObject.getBoolean("success")) {
 				throw new DataException(playerstatsObject.getString("error"));
 			}else{
-				String gameName = playerstatsObject.getString(JSON_ITEM_GAME_NAME);
+				String gameName = playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 			
 				List<String> openAchievements = new ArrayList<String>();
 				List<String> closedAchievements = new ArrayList<String>();
 
-				JSONArray achievementsJSON = playerstatsObject.getJSONArray(JSON_ITEM_ACHIEVEMENTS);
+				JSONArray achievementsJSON = playerstatsObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
 				for (int i = 0; i < achievementsJSON.length(); i++) {
 					JSONObject achievementJSON = achievementsJSON.getJSONObject(i);
 					
@@ -108,7 +101,7 @@ public class UserStatsBuilder {
 				return new PlayerAchievements(steamId, appId, language, gameName, openAchievements, closedAchievements);
 			}
 		} catch (JSONException e) {
-			throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+			throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
 		}
 
 	}
@@ -130,11 +123,11 @@ public class UserStatsBuilder {
 		try {
 			JSONObject gameObject = data.getJSONObject("game");
 
-			if (!gameObject.has(JSON_ITEM_GAME_NAME) && !gameObject.has("gameVersion")) {
+			if (!gameObject.has(WebApiConstants.RESPONSE_ITEM_GAME_NAME) && !gameObject.has("gameVersion")) {
 				throw new DataException(String.format("No schema for app ID %s", appId));
 			}
 
-			String gameName = gameObject.getString(JSON_ITEM_GAME_NAME);
+			String gameName = gameObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 			int gameVersion = gameObject.getInt("gameVersion");
 
 			// assumption is made that if the object has a name and version,
@@ -146,7 +139,7 @@ public class UserStatsBuilder {
 
 			return new GameStatsSchema(appId, language, gameName, gameVersion, gameStats, gameAchievements);
 		} catch (JSONException e) {
-			throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+			throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
 		}
 	}
 
@@ -160,13 +153,13 @@ public class UserStatsBuilder {
 	 */
 	private Map<String, GameStat> buildGameStats(JSONObject availableGameStats) throws JSONException {
 		Map<String, GameStat> stats = new HashMap<String, GameStat>();
-		if (availableGameStats.has(JSON_ITEM_STATS)) {
+		if (availableGameStats.has(WebApiConstants.RESPONSE_ITEM_STATS)) {
 			stats = new TreeMap<String, GameStat>();
-			JSONArray statsJSON = availableGameStats.getJSONArray(JSON_ITEM_STATS);
+			JSONArray statsJSON = availableGameStats.getJSONArray(WebApiConstants.RESPONSE_ITEM_STATS);
 			for (int i = 0; i < statsJSON.length(); i++) {
 				JSONObject statJSON = statsJSON.getJSONObject(i);
 				
-				String name = statJSON.getString(JSON_ITEM_NAME);
+				String name = statJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
 				int defaultValue = statJSON.getInt("defaultvalue");
 				String displayName = statJSON.getString("displayName");
 
@@ -188,13 +181,13 @@ public class UserStatsBuilder {
 	 */
 	private Map<String, GameAchievement> buildGameAchievements(JSONObject availableGameStats) throws JSONException {
 		Map<String, GameAchievement> achievements = new HashMap<String, GameAchievement>();
-		if (availableGameStats.has(JSON_ITEM_ACHIEVEMENTS)) {
+		if (availableGameStats.has(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS)) {
 			achievements = new TreeMap<String, GameAchievement>();
-			JSONArray achievementsJSON = availableGameStats.getJSONArray(JSON_ITEM_ACHIEVEMENTS);
+			JSONArray achievementsJSON = availableGameStats.getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
 			for (int i = 0; i < achievementsJSON.length(); i++) {
 				JSONObject achievementJSON = achievementsJSON.getJSONObject(i);
 				
-				String name = achievementJSON.getString(JSON_ITEM_NAME);
+				String name = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
 				int defaultValue = achievementJSON.getInt("defaultvalue");
 				String displayName = achievementJSON.getString("displayName");
 				String description = achievementJSON.has("description") ? achievementJSON.getString("description") : "";
@@ -225,17 +218,17 @@ public class UserStatsBuilder {
 	public UserStats buildUserStatsForGame(long steamId, int appId, JSONObject data) throws ParseException {
 		try {
 			JSONObject playerstatsObject = data.getJSONObject("playerstats");
-			String gameName = playerstatsObject.getString(JSON_ITEM_GAME_NAME);
+			String gameName = playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 		
 			Map<String, Integer> userStatList = buildUserStats(playerstatsObject);
 			List<String> closedAchievements = new ArrayList<String>();
 			
-			if(playerstatsObject.has(JSON_ITEM_ACHIEVEMENTS)) {
-				JSONArray achievementsJSON = playerstatsObject.getJSONArray(JSON_ITEM_ACHIEVEMENTS);
+			if(playerstatsObject.has(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS)) {
+				JSONArray achievementsJSON = playerstatsObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
 				for (int i = 0; i < achievementsJSON.length(); i++) {
 					JSONObject achievementJSON = achievementsJSON.getJSONObject(i);
 					
-					String name = achievementJSON.getString(JSON_ITEM_NAME);
+					String name = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
 
 					//Assumption made that only closed achievements are provided
 					closedAchievements.add(name);
@@ -244,7 +237,7 @@ public class UserStatsBuilder {
 
 			return new UserStats(steamId, appId, gameName, userStatList, closedAchievements);
 		} catch (JSONException e) {
-			throw new ParseException(ERR_COULD_NOT_PARSE_JSON_DATA, e);
+			throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
 		}
 	}
 
@@ -258,12 +251,12 @@ public class UserStatsBuilder {
 	 */
 	private Map<String, Integer> buildUserStats(JSONObject playerstatsObject) throws JSONException {
 		Map<String, Integer> stats = new TreeMap<String, Integer>();
-		if(playerstatsObject.has(JSON_ITEM_STATS)) {
-			JSONArray statsJSON = playerstatsObject.getJSONArray(JSON_ITEM_STATS);
+		if(playerstatsObject.has(WebApiConstants.RESPONSE_ITEM_STATS)) {
+			JSONArray statsJSON = playerstatsObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_STATS);
 			for (int i = 0; i < statsJSON.length(); i++) {
 				JSONObject statJSON = statsJSON.getJSONObject(i);
 				
-				String name = statJSON.getString(JSON_ITEM_NAME);
+				String name = statJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
 				int value = statJSON.getInt("value");
 				
 				stats.put(name, value);

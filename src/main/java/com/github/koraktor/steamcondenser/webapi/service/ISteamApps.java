@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.webapi.apps.UpToDateCheck;
 import com.github.koraktor.steamcondenser.webapi.builder.AppsBuilder;
@@ -27,8 +28,6 @@ import com.github.koraktor.steamcondenser.webapi.builder.AppsBuilder;
  * @author Sebastian Staudt
  */
 public class ISteamApps {
-	private static final String I_STEAM_APPS = "ISteamApps";
-
 	private final AppsBuilder appsBuilder;
 	
 	/**
@@ -48,7 +47,7 @@ public class ISteamApps {
 	 * @throws JSONException if the JSON returned from the service is malformed.
 	 */
 	public Map<Long,String> getAppList() throws WebApiException, JSONException {
-		JSONObject data = WebApi.getJSONResponse(I_STEAM_APPS, "GetAppList", 2, null);
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_APP_LIST, 2, null);
 
 		return appsBuilder.buildAppList(data);
 	}
@@ -67,9 +66,9 @@ public class ISteamApps {
 	 */
 	public UpToDateCheck upToDateCheck(int appId, int versionNumberToCheck) throws WebApiException, JSONException {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("appid", Integer.toString(appId));
-		params.put("version", Integer.toString(versionNumberToCheck));
-		JSONObject data = WebApi.getJSONResponse(I_STEAM_APPS, "UpToDateCheck", 1, params);
+		params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+		params.put(WebApiConstants.REQUEST_PARAM_VERSION, Integer.toString(versionNumberToCheck));
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_UP_TO_DATE_CHECK, 1, params);
 			
 		return appsBuilder.buildUpToDateCheck(appId, versionNumberToCheck, data);
 	}
@@ -84,8 +83,8 @@ public class ISteamApps {
 	 */
 	public List<ServerAtAddress> getServersAtAddress(String ip) throws WebApiException, JSONException {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("addr", ip);
-		JSONObject data = WebApi.getJSONResponse(I_STEAM_APPS, "GetServersAtAddress", 1, params);
+		params.put(WebApiConstants.REQUEST_PARAM_ADDR, ip);
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_SERVERS_AT_ADDRESS, 1, params);
 		
 		return appsBuilder.buildServersAtAddress(ip, data);
 	}

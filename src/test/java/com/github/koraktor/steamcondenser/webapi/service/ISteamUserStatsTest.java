@@ -34,6 +34,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.builder.UserStatsBuilder;
 import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
@@ -75,7 +76,7 @@ public class ISteamUserStatsTest {
 		JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetGlobalAchievementPercentagesForApp", 2, params)).thenReturn(globalPercentagesDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
 
 		GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
 		when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);
@@ -94,7 +95,7 @@ public class ISteamUserStatsTest {
 		JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("ISteamUserStats/getCurrentNumberOfPlayers.v1.json"));
 		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetNumberOfCurrentPlayers", 1, params)).thenReturn(numberOfPlayersDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params)).thenReturn(numberOfPlayersDocument);
 
 		int numberOfPlayers = iSteamUserStats.getNumberOfCurrentPlayers(440);
 		assertEquals(68532, numberOfPlayers);
@@ -109,7 +110,7 @@ public class ISteamUserStatsTest {
 		params.put("appid", Integer.toString(APPID_TF2));
 		params.put("l", LANG_EN);
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetPlayerAchievements", 1, params)).thenReturn(playerAchievementsDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
 
 		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
 		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN, playerAchievementsDocument)).thenReturn(playerAchievements);
@@ -126,7 +127,7 @@ public class ISteamUserStatsTest {
 		params.put("steamid", Long.toString(STEAM_ID));
 		params.put("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetPlayerAchievements", 1, params)).thenReturn(playerAchievementsDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
 
 		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
 		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, null, playerAchievementsDocument)).thenReturn(playerAchievements);
@@ -143,7 +144,7 @@ public class ISteamUserStatsTest {
 		params.put("steamid", Long.toString(STEAM_ID));
 		params.put("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetPlayerAchievements", 1, params)).thenReturn(playerAchievementsDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
 
 		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
 		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument)).thenReturn(playerAchievements);
@@ -161,7 +162,7 @@ public class ISteamUserStatsTest {
 		params.put("appid", Integer.toString(APPID_TF2));
 		params.put("l", LANG_EN);
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetSchemaForGame", 2, params)).thenReturn(schemaForGameDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
 		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
 		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
@@ -176,7 +177,7 @@ public class ISteamUserStatsTest {
 		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetSchemaForGame", 2, params)).thenReturn(schemaForGameDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
 		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
 		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, null, schemaForGameDocument)).thenReturn(gameStatsSchema);
@@ -191,7 +192,7 @@ public class ISteamUserStatsTest {
 		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetSchemaForGame", 2, params)).thenReturn(schemaForGameDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
 		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
 		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, "", schemaForGameDocument)).thenReturn(gameStatsSchema);
@@ -209,7 +210,7 @@ public class ISteamUserStatsTest {
 		params.put("steamid", Long.toString(STEAM_ID));
 		params.put("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetUserStatsForGame", 2, params)).thenReturn(userStatsForGameDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_USER_STATS_FOR_GAME, 2, params)).thenReturn(userStatsForGameDocument);
 
 		UserStats userStats = mock(UserStats.class);
 		when(userStatsBuilder.buildUserStatsForGame(STEAM_ID, APPID_TF2, userStatsForGameDocument)).thenReturn(userStats);
@@ -226,7 +227,7 @@ public class ISteamUserStatsTest {
 		params.put("appid", Integer.toString(APPID_TF2));
 		params.put("l", LANG_EN);
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetSchemaForGame", 2, params)).thenReturn(schemaForGameDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
 		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
 		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
@@ -245,7 +246,7 @@ public class ISteamUserStatsTest {
 		JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse("ISteamUserStats", "GetGlobalAchievementPercentagesForApp", 2, params)).thenReturn(globalPercentagesDocument);
+		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
 
 		GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
 		when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);

@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
+import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.builder.PlayerServiceBuilder;
 import com.github.koraktor.steamcondenser.webapi.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.webapi.playerservice.PlayerBadgeDetails;
@@ -26,8 +27,6 @@ import com.github.koraktor.steamcondenser.webapi.playerservice.PlayerBadgeDetail
  * @author Sebastian Staudt
  */
 public class IPlayerService {
-	private static final String I_PLAYER_SERVICE = "IPlayerService";
-
 	private final PlayerServiceBuilder playerServiceBuilder;
 	
 	/**
@@ -45,10 +44,10 @@ public class IPlayerService {
 
 	public OwnedGames getRecentlyPlayedGames(long steamId, int count) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(steamId));
-		params.put("count", Integer.toString(count));
+		params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
+		params.put(WebApiConstants.REQUEST_PARAM_COUNT, Integer.toString(count));
 
-		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetRecentlyPlayedGames", 1, params);
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_RECENTLY_PLAYED_GAMES, 1, params);
 		return playerServiceBuilder.buildRecentlyPlayedGames(data);
 	}
 
@@ -65,24 +64,24 @@ public class IPlayerService {
 	
 	private JSONObject callGetOwnedGamesMethod(long steamId, boolean includeAppInfo, boolean includePlayedFreeGames) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(steamId));
-		params.put("include_appinfo", new Integer(includeAppInfo ? 1 : 0));
-		params.put("include_played_free_games", new Integer(includePlayedFreeGames ? 1 : 0));		
+		params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
+		params.put(WebApiConstants.REQUEST_PARAM_INCLUDE_APPINFO, new Integer(includeAppInfo ? 1 : 0));
+		params.put(WebApiConstants.REQUEST_PARAM_INCLUDE_PLAYED_FREE_GAMES, new Integer(includePlayedFreeGames ? 1 : 0));		
 
-		return WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetOwnedGames", 1, params);
+		return WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_OWNED_GAMES, 1, params);
 	}
 	
 	public int getSteamLevel(long steamId) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(steamId));
-		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetSteamLevel", 1, params);
-		return data.getJSONObject("response").getInt("player_level");
+		params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_STEAM_LEVEL, 1, params);
+		return data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getInt("player_level");
 	}
 
 	public PlayerBadgeDetails getBadges(long steamId) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(steamId));
-		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetBadges", 1, params);
+		params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_BADGES, 1, params);
 		return playerServiceBuilder.buildBadges(data);
 	}
 
@@ -92,12 +91,12 @@ public class IPlayerService {
 
 	public Map<Long, Boolean> getCommunityBadgeProgress(long steamId, long badgeId) throws WebApiException, JSONException {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(steamId));
+		params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
 		if(badgeId > -1) {
-			params.put("badgeid", Long.toString(badgeId));
+			params.put(WebApiConstants.REQUEST_PARAM_BADGE_ID, Long.toString(badgeId));
 		}
 
-		JSONObject data = WebApi.getJSONResponse(I_PLAYER_SERVICE, "GetCommunityBadgeProgress", 1, params);
+		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_COMMUNITY_BADGE_PROGRESS, 1, params);
 		return playerServiceBuilder.buildCommunityBadgesProgress(data);
 	}
 }
