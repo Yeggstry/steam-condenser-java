@@ -259,6 +259,26 @@ public class UserStatsBuilderTest {
 	}
 
 	@Test
+	public void testBuildUserStatsForGameNoStats() throws WebApiException, JSONException, IOException, ParseException {
+		JSONObject userStatsForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetUserStatsForGame.NoStats.v2.json"));
+
+		UserStats userStats = userStatsBuilder.buildUserStatsForGame(12345, 440, userStatsForGameDocument);
+
+		assertTrue(userStats.hasAchievements());
+		assertFalse(userStats.hasStats());
+	}
+
+	@Test
+	public void testBuildUserStatsForGameNoAchievements() throws WebApiException, JSONException, IOException, ParseException {
+		JSONObject userStatsForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetUserStatsForGame.NoAchievements.v2.json"));
+
+		UserStats userStats = userStatsBuilder.buildUserStatsForGame(12345, 440, userStatsForGameDocument);
+
+		assertFalse(userStats.hasAchievements());
+		assertTrue(userStats.hasStats());
+	}
+
+	@Test
 	public void testGetUserStatsForGameNoStatsOrAchievements() throws WebApiException, JSONException, IOException, ParseException {
 		JSONObject userStatsForGameDocument = new JSONObject("{ \"playerstats\": {	\"steamID\": \"12345\",	\"gameName\": \"AaaaaAAaaaAAAaaAAAAaAAAAA!!!\"	}}");
 

@@ -1,0 +1,176 @@
+{
+	"playerstats": {
+		"steamID": "12345",
+		"gameName": "Team Fortress 2",
+		"stats": [
+			{
+				"name": "Engineer.accum.iBuildingsDestroyed",
+				"value": 17
+			},
+			{
+				"name": "Engineer.accum.iDamageDealt",
+				"value": 234641
+			},
+			{
+				"name": "Engineer.accum.iDominations",
+				"value": 75
+			},
+			{
+				"name": "Engineer.accum.iKillAssists",
+				"value": 405
+			},
+			{
+				"name": "Engineer.accum.iNumberOfKills",
+				"value": 1133
+			},
+			{
+				"name": "Engineer.accum.iPlayTime",
+				"value": 93938
+			},
+			{
+				"name": "Engineer.accum.iPointCaptures",
+				"value": 20
+			},
+			{
+				"name": "Engineer.accum.iPointDefenses",
+				"value": 85
+			},
+			{
+				"name": "Engineer.accum.iPointsScored",
+				"value": 1640
+			},
+			{
+				"name": "Engineer.accum.iRevenge",
+				"value": 17
+			},
+			{
+				"name": "Engineer.max.iBuildingsDestroyed",
+				"value": 2
+			},
+			{
+				"name": "Engineer.max.iDamageDealt",
+				"value": 3291
+			},
+			{
+				"name": "Engineer.max.iDominations",
+				"value": 2
+			},
+			{
+				"name": "Engineer.max.iKillAssists",
+				"value": 7
+			},
+			{
+				"name": "Engineer.max.iNumberOfKills",
+				"value": 18
+			},
+			{
+				"name": "Engineer.max.iPlayTime",
+				"value": 759
+			},
+			{
+				"name": "Engineer.max.iPointCaptures",
+				"value": 1
+			},
+			{
+				"name": "Engineer.max.iPointDefenses",
+				"value": 3
+			},
+			{
+				"name": "Engineer.max.iPointsScored",
+				"value": 18
+			},
+			{
+				"name": "Engineer.max.iRevenge",
+				"value": 1
+			},
+			{
+				"name": "Engineer.accum.iBuildingsBuilt",
+				"value": 1477
+			},
+			{
+				"name": "Engineer.max.iBuildingsBuilt",
+				"value": 17
+			},
+			{
+				"name": "Engineer.accum.iNumTeleports",
+				"value": 505
+			},
+			{
+				"name": "Engineer.max.iNumTeleports",
+				"value": 29
+			},
+			{
+				"name": "Engineer.max.iSentryKills",
+				"value": 15
+			},
+			{
+				"name": "Engineer.mvm.accum.iDamageDealt",
+				"value": 32807
+			},
+			{
+				"name": "Engineer.mvm.accum.iKillAssists",
+				"value": 62
+			},
+			{
+				"name": "Engineer.mvm.accum.iNumberOfKills",
+				"value": 223
+			},
+			{
+				"name": "Engineer.mvm.accum.iPlayTime",
+				"value": 2126
+			},
+			{
+				"name": "Engineer.mvm.accum.iPointDefenses",
+				"value": 42
+			},
+			{
+				"name": "Engineer.mvm.accum.iPointsScored",
+				"value": 302
+			},
+			{
+				"name": "Engineer.mvm.max.iDamageDealt",
+				"value": 6320
+			},
+			{
+				"name": "Engineer.mvm.max.iKillAssists",
+				"value": 15
+			},
+			{
+				"name": "Engineer.mvm.max.iNumberOfKills",
+				"value": 47
+			},
+			{
+				"name": "Engineer.mvm.max.iPlayTime",
+				"value": 317
+			},
+			{
+				"name": "Engineer.mvm.max.iPointDefenses",
+				"value": 9
+			},
+			{
+				"name": "Engineer.mvm.max.iPointsScored",
+				"value": 62
+			},
+			{
+				"name": "Engineer.mvm.accum.iBuildingsBuilt",
+				"value": 36
+			},
+			{
+				"name": "Engineer.mvm.max.iBuildingsBuilt",
+				"value": 7
+			},
+			{
+				"name": "Engineer.mvm.accum.iNumTeleports",
+				"value": 22
+			},
+			{
+				"name": "Engineer.mvm.max.iNumTeleports",
+				"value": 4
+			},
+			{
+				"name": "Engineer.mvm.max.iSentryKills",
+				"value": 45
+			}
+		]		
+	}
+}
