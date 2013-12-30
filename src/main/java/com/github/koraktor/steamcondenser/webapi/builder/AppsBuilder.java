@@ -40,10 +40,10 @@ public class AppsBuilder {
     public Map<Long, String> buildAppList(JSONObject data) throws ParseException {
         try {
             Map<Long, String> appList = new TreeMap<Long, String>();
-            JSONArray appsData = data.getJSONObject("applist").getJSONArray("apps");
+            JSONArray appsData = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_APP_LIST).getJSONArray(WebApiConstants.RESPONSE_ITEM_APPS);
             for(int i = 0; i < appsData.length(); i ++) {
                 JSONObject achievementData = appsData.getJSONObject(i);
-                appList.put(achievementData.getLong("appid"), achievementData.getString(WebApiConstants.RESPONSE_ITEM_NAME));
+                appList.put(achievementData.getLong(WebApiConstants.APP_ID), achievementData.getString(WebApiConstants.RESPONSE_ITEM_NAME));
             }
             return appList;
         } catch(JSONException e) {
@@ -70,13 +70,13 @@ public class AppsBuilder {
             String message = null;
 
             JSONObject response = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            upToDate = response.getBoolean("up_to_date");
-            versionIsListable = response.getBoolean("version_is_listable");
-            if(response.has("required_version")) {
-                requiredVersion = response.getInt("required_version");
+            upToDate = response.getBoolean(WebApiConstants.RESPONSE_ITEM_UP_TO_DATE);
+            versionIsListable = response.getBoolean(WebApiConstants.RESPONSE_ITEM_VERSION_IS_LISTABLE);
+            if(response.has(WebApiConstants.RESPONSE_ITEM_REQUIRED_VERSION)) {
+                requiredVersion = response.getInt(WebApiConstants.RESPONSE_ITEM_REQUIRED_VERSION);
             }
-            if(response.has("required_version")) {
-                message = response.getString("message");
+            if(response.has(WebApiConstants.RESPONSE_ITEM_MESSAGE)) {
+                message = response.getString(WebApiConstants.RESPONSE_ITEM_MESSAGE);
             }
             return new UpToDateCheck(appId, upToDate, versionIsListable, requiredVersion, message);
         } catch(JSONException e) {
@@ -96,24 +96,24 @@ public class AppsBuilder {
     public List<ServerAtAddress> buildServersAtAddress(String ip, JSONObject data) throws WebApiException {
         try {
             JSONObject response = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            if(!response.getBoolean("success")) {
+            if(!response.getBoolean(WebApiConstants.RESPONSE_ITEM_SUCCESS)) {
                 throw new RequestFailedException(String.format("Invalid IP address: %s",ip));
             }
 
             List<ServerAtAddress> serversAtAddress = new ArrayList<ServerAtAddress>();
-            JSONArray servers = response.getJSONArray("servers");
+            JSONArray servers = response.getJSONArray(WebApiConstants.RESPONSE_ITEM_SERVERS);
             for (int i = 0; i < servers.length(); i++) {
                 JSONObject server = servers.getJSONObject(i);
 
-                String address = server.getString("addr");
-                int gmsIndex = server.getInt("gmsindex");
-                int appId = server.getInt("appid");
-                String gameDir = server.getString("gamedir");
-                int region = server.getInt("region");
-                boolean secure = server.getBoolean("secure");
-                boolean lan = server.getBoolean("lan");
-                int gamePort = server.getInt("gameport");
-                int specPort = server.getInt("specport");
+                String address = server.getString(WebApiConstants.RESPONSE_ITEM_SERVER_ADDRESS);
+                int gmsIndex = server.getInt(WebApiConstants.RESPONSE_ITEM_SERVER_GMS_INDEX);
+                int appId = server.getInt(WebApiConstants.APP_ID);
+                String gameDir = server.getString(WebApiConstants.RESPONSE_ITEM_SERVER_GAME_DIR);
+                int region = server.getInt(WebApiConstants.RESPONSE_ITEM_SERVER_REGION);
+                boolean secure = server.getBoolean(WebApiConstants.RESPONSE_ITEM_SERVER_SECURE);
+                boolean lan = server.getBoolean(WebApiConstants.RESPONSE_ITEM_SERVER_LAN);
+                int gamePort = server.getInt(WebApiConstants.RESPONSE_ITEM_SERVER_GAME_PORT);
+                int specPort = server.getInt(WebApiConstants.RESPONSE_ITEM_SERVER_SPECTATOR_PORT);
 
                 ServerAtAddress serverAtAddress = new ServerAtAddress(address, gmsIndex, appId, gameDir, region, secure, lan, gamePort, specPort);
                 serversAtAddress.add(serverAtAddress);

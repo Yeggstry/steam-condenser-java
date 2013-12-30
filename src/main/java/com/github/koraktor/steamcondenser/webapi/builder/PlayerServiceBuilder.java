@@ -37,8 +37,8 @@ public class PlayerServiceBuilder {
     public OwnedGames buildRecentlyPlayedGames(JSONObject data) throws ParseException {
         try {
             JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            int totalCount = responseObject.getInt("total_count");
-            JSONArray gamesData = responseObject.getJSONArray("games");
+            int totalCount = responseObject.getInt(WebApiConstants.RESPONSE_ITEM_TOTAL_COUNT);
+            JSONArray gamesData = responseObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_GAMES);
 
             List<OwnedGameWithAppInfo> recentlyPlayedGamesList = buildOwnedGameListWithAppInfo(gamesData);
             return new OwnedGames(totalCount, recentlyPlayedGamesList);
@@ -50,19 +50,19 @@ public class PlayerServiceBuilder {
     public OwnedGames buildOwnedGames(JSONObject data) throws ParseException {
         try {
             JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            int gameCount = responseObject.getInt("game_count");
-            JSONArray gamesData = responseObject.getJSONArray("games");
+            int gameCount = responseObject.getInt(WebApiConstants.RESPONSE_ITEM_GAME_COUNT);
+            JSONArray gamesData = responseObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_GAMES);
             List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
             for(int i = 0; i < gamesData.length(); i ++) {
                 JSONObject ownedGameData = gamesData.getJSONObject(i);
-                long appId = ownedGameData.getLong("appid");
+                long appId = ownedGameData.getLong(WebApiConstants.APP_ID);
                 long playtime2Weeks;
-                if(ownedGameData.has("playtime_2weeks")) {
-                    playtime2Weeks = ownedGameData.getLong("playtime_2weeks");
+                if(ownedGameData.has(WebApiConstants.RESPONSE_ITEM_PLAYTIME_TWO_WEEKS)) {
+                    playtime2Weeks = ownedGameData.getLong(WebApiConstants.RESPONSE_ITEM_PLAYTIME_TWO_WEEKS);
                 }else{
                     playtime2Weeks = 0;
                 }
-                long playtimeForever = ownedGameData.getLong("playtime_forever");
+                long playtimeForever = ownedGameData.getLong(WebApiConstants.RESPONSE_ITEM_PLAYTIME_FOREVER);
 
                 OwnedGame playerOwnedGame = new OwnedGame(appId, playtime2Weeks, playtimeForever);
                 ownedGamesList.add(playerOwnedGame);
@@ -76,8 +76,8 @@ public class PlayerServiceBuilder {
     public OwnedGames buildOwnedGamesWithAppInfo(JSONObject data) throws ParseException {
         try {
             JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            int gameCount = responseObject.getInt("game_count");
-            JSONArray gamesData = responseObject.getJSONArray("games");
+            int gameCount = responseObject.getInt(WebApiConstants.RESPONSE_ITEM_GAME_COUNT);
+            JSONArray gamesData = responseObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_GAMES);
 
             List<OwnedGameWithAppInfo> ownedGamesList = buildOwnedGameListWithAppInfo(gamesData);
             return new OwnedGames(gameCount, ownedGamesList);
@@ -91,17 +91,17 @@ public class PlayerServiceBuilder {
 
         for(int i = 0; i < gamesData.length(); i ++) {
             JSONObject ownedGameData = gamesData.getJSONObject(i);
-            long appId = ownedGameData.getLong("appid");
-            String gameName = ownedGameData.getString("name");
+            long appId = ownedGameData.getLong(WebApiConstants.APP_ID);
+            String gameName = ownedGameData.getString(WebApiConstants.RESPONSE_ITEM_NAME);
             long playtime2Weeks;
-            if(ownedGameData.has("playtime_2weeks")) {
-                playtime2Weeks = ownedGameData.getLong("playtime_2weeks");
+            if(ownedGameData.has(WebApiConstants.RESPONSE_ITEM_PLAYTIME_TWO_WEEKS)) {
+                playtime2Weeks = ownedGameData.getLong(WebApiConstants.RESPONSE_ITEM_PLAYTIME_TWO_WEEKS);
             }else{
                 playtime2Weeks = 0;
             }
-            long playtimeForever = ownedGameData.getLong("playtime_forever");
-            String iconUrl = ownedGameData.getString("img_icon_url");
-            String logoUrl = ownedGameData.getString("img_logo_url");
+            long playtimeForever = ownedGameData.getLong(WebApiConstants.RESPONSE_ITEM_PLAYTIME_FOREVER);
+            String iconUrl = ownedGameData.getString(WebApiConstants.RESPONSE_ITEM_IMG_ICON_URL);
+            String logoUrl = ownedGameData.getString(WebApiConstants.RESPONSE_ITEM_IMG_LOGO_URL);
 
             OwnedGameWithAppInfo ownedGameWithAppInfo = new OwnedGameWithAppInfo(appId, playtime2Weeks, playtimeForever, gameName, iconUrl, logoUrl);
             ownedGamesListWithAppInfo.add(ownedGameWithAppInfo);
@@ -112,30 +112,30 @@ public class PlayerServiceBuilder {
     public PlayerBadgeDetails buildBadges(JSONObject data) throws ParseException {
         try {
             JSONObject responseObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
-            long playerXp = responseObject.getLong("player_xp");
-            int playerLevel = responseObject.getInt("player_level");
-            long xpNeededToLevelUp = responseObject.getLong("player_xp_needed_to_level_up");
-            long xpNeededForCurrentLevel = responseObject.getLong("player_xp_needed_current_level");
+            int playerLevel = responseObject.getInt(WebApiConstants.RESPONSE_ITEM_PLAYER_LEVEL);
+            long playerXp = responseObject.getLong(WebApiConstants.RESPONSE_ITEM_PLAYER_XP);
+            long xpNeededToLevelUp = responseObject.getLong(WebApiConstants.RESPONSE_ITEM_PLAYER_XP_NEEDED_TO_LEVEL_UP);
+            long xpNeededForCurrentLevel = responseObject.getLong(WebApiConstants.RESPONSE_ITEM_PLAYER_XP_NEEDED_CURRENT_LEVEL);
 
             PlayerBadgeDetails playerBadgeDetails = new PlayerBadgeDetails(playerXp, playerLevel, xpNeededToLevelUp, xpNeededForCurrentLevel); 
 
             List<Badge> badges = new ArrayList<Badge>();
-            JSONArray badgesData = responseObject.getJSONArray("badges");
+            JSONArray badgesData = responseObject.getJSONArray(WebApiConstants.RESPONSE_ITEM_BADGES);
             for(int i = 0; i < badgesData.length(); i ++) {
                 JSONObject badgeData = badgesData.getJSONObject(i);
 
                 Badge badge;
 
-                long badgeId = badgeData.getLong("badgeid");
-                int level = badgeData.getInt("level");
-                Date completionTime = new java.util.Date(badgeData.getLong("completion_time")*1000);
-                int xp = badgeData.getInt("xp");
-                long scarcity = badgeData.getLong("scarcity");
+                long badgeId = badgeData.getLong(WebApiConstants.BADGE_ID);
+                int level = badgeData.getInt(WebApiConstants.RESPONSE_ITEM_BADGE_LEVEL);
+                Date completionTime = new java.util.Date(badgeData.getLong(WebApiConstants.RESPONSE_ITEM_BADGE_COMPLETION_TIME)*1000);
+                int xp = badgeData.getInt(WebApiConstants.RESPONSE_ITEM_BADGE_XP);
+                long scarcity = badgeData.getLong(WebApiConstants.RESPONSE_ITEM_BADGE_SCARCITY);
 
-                if(badgeData.has("appid")) {
-                    long appId = badgeData.getLong("appid");
-                    long communityItemId = badgeData.getLong("communityitemid");
-                    long borderColor = badgeData.getLong("border_color");
+                if(badgeData.has(WebApiConstants.APP_ID)) {
+                    long appId = badgeData.getLong(WebApiConstants.APP_ID);
+                    long communityItemId = badgeData.getLong(WebApiConstants.RESPONSE_ITEM_BADGE_COMMUNITY_ITEM_ID);
+                    long borderColor = badgeData.getLong(WebApiConstants.RESPONSE_ITEM_BADGE_BORDER_COLOR);
 
                     badge = new AppBadge(badgeId, level, completionTime, xp, scarcity, appId, communityItemId, borderColor);
                 }else{
@@ -155,11 +155,11 @@ public class PlayerServiceBuilder {
     public Map<Long, Boolean> buildCommunityBadgesProgress(JSONObject data) throws ParseException {
         try {
             Map<Long, Boolean> communityBadgeProgress = new HashMap<Long, Boolean>();
-            JSONArray badgeProgressData = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getJSONArray("quests");
+            JSONArray badgeProgressData = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getJSONArray(WebApiConstants.RESPONSE_ITEM_COMUNITY_BADGE_QUESTS);
             for(int i = 0; i < badgeProgressData.length(); i ++) {
                 JSONObject questData = badgeProgressData.getJSONObject(i);
-                Long questId = questData.getLong("questid");
-                Boolean completed = questData.getBoolean("completed");
+                Long questId = questData.getLong(WebApiConstants.RESPONSE_ITEM_COMUNITY_BADGE_QUEST_ID);
+                Boolean completed = questData.getBoolean(WebApiConstants.RESPONSE_ITEM_COMUNITY_BADGE_QUEST_COMPLETED);
                 communityBadgeProgress.put(questId, completed);
             }
             return communityBadgeProgress;

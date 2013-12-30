@@ -19,8 +19,8 @@ import org.json.JSONObject;
 
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
-import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameAchievement;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStat;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStatsSchema;
@@ -49,7 +49,7 @@ public class UserStatsBuilder {
     public GlobalAchievements buildGlobalAchievements(int appId, JSONObject data) throws ParseException {
         try {
             Map<String, Double> percentages = new TreeMap<String, Double>();
-            JSONArray achievementsData = data.getJSONObject("achievementpercentages").getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
+            JSONArray achievementsData = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENT_PERCENTAGES).getJSONArray(WebApiConstants.RESPONSE_ITEM_ACHIEVEMENTS);
             for(int i = 0; i < achievementsData.length(); i ++) {
                 JSONObject achievementData = achievementsData.getJSONObject(i);
                 percentages.put(achievementData.getString(WebApiConstants.RESPONSE_ITEM_NAME), achievementData.getDouble("percent"));
@@ -76,9 +76,9 @@ public class UserStatsBuilder {
      */
     public PlayerAchievements buildPlayerAchievements(long steamId, int appId, String language, JSONObject data) throws WebApiException {
         try {
-            JSONObject playerstatsObject = data.getJSONObject("playerstats");
-            if(!playerstatsObject.getBoolean("success")) {
-                throw new RequestFailedException(playerstatsObject.getString("error"));
+            JSONObject playerstatsObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_PLAYER_STATS);
+            if(!playerstatsObject.getBoolean(WebApiConstants.RESPONSE_ITEM_SUCCESS)) {
+                throw new RequestFailedException(playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_ERROR));
             }else{
                 String gameName = playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 
@@ -89,8 +89,8 @@ public class UserStatsBuilder {
                 for (int i = 0; i < achievementsJSON.length(); i++) {
                     JSONObject achievementJSON = achievementsJSON.getJSONObject(i);
 
-                    String name = achievementJSON.getString("apiname");
-                    boolean isAchieved = achievementJSON.getInt("achieved") == 1 ? true : false;
+                    String name = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_API_NAME);
+                    boolean isAchieved = achievementJSON.getInt(WebApiConstants.RESPONSE_ITEM_ACHIEVED) == 1 ? true : false;
 
                     if(isAchieved) {
                         closedAchievements.add(name);
@@ -122,18 +122,18 @@ public class UserStatsBuilder {
      */
     public GameStatsSchema buildSchemaForGame(int appId, String language, JSONObject data) throws WebApiException {
         try {
-            JSONObject gameObject = data.getJSONObject("game");
+            JSONObject gameObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_GAME);
 
-            if (!gameObject.has(WebApiConstants.RESPONSE_ITEM_GAME_NAME) && !gameObject.has("gameVersion")) {
+            if (!gameObject.has(WebApiConstants.RESPONSE_ITEM_GAME_NAME) && !gameObject.has(WebApiConstants.RESPONSE_ITEM_GAME_VERSION)) {
                 throw new RequestFailedException(String.format("No schema for app ID %s", appId));
             }
 
             String gameName = gameObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
-            int gameVersion = gameObject.getInt("gameVersion");
+            int gameVersion = gameObject.getInt(WebApiConstants.RESPONSE_ITEM_GAME_VERSION);
 
             // assumption is made that if the object has a name and version,
             // then it has stats.
-            JSONObject availableGameStats = gameObject.getJSONObject("availableGameStats");
+            JSONObject availableGameStats = gameObject.getJSONObject(WebApiConstants.RESPONSE_ITEM_AVAILABLE_GAME_STATS);
 
             Map<String, GameStat> gameStats = buildGameStats(availableGameStats);
             Map<String, GameAchievement> gameAchievements = buildGameAchievements(availableGameStats);
@@ -161,8 +161,8 @@ public class UserStatsBuilder {
                 JSONObject statJSON = statsJSON.getJSONObject(i);
 
                 String name = statJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
-                int defaultValue = statJSON.getInt("defaultvalue");
-                String displayName = statJSON.getString("displayName");
+                int defaultValue = statJSON.getInt(WebApiConstants.RESPONSE_ITEM_DEFAULT_VALUE);
+                String displayName = statJSON.getString(WebApiConstants.RESPONSE_ITEM_DISPLAY_NAME);
 
                 GameStat stat = new GameStat(name, defaultValue, displayName);
 
@@ -189,12 +189,12 @@ public class UserStatsBuilder {
                 JSONObject achievementJSON = achievementsJSON.getJSONObject(i);
 
                 String name = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
-                int defaultValue = achievementJSON.getInt("defaultvalue");
-                String displayName = achievementJSON.getString("displayName");
-                String description = achievementJSON.has("description") ? achievementJSON.getString("description") : "";
-                String iconOpenUrl = achievementJSON.getString("icongray");
-                String iconClosedUrl = achievementJSON.getString("icon");
-                boolean hidden = achievementJSON.getInt("hidden") == 1 ? true : false;
+                int defaultValue = achievementJSON.getInt(WebApiConstants.RESPONSE_ITEM_DEFAULT_VALUE);
+                String displayName = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_DISPLAY_NAME);
+                String description = achievementJSON.has(WebApiConstants.RESPONSE_ITEM_DESCRIPTION) ? achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_DESCRIPTION) : "";
+                String iconOpenUrl = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_ICON_GRAY);
+                String iconClosedUrl = achievementJSON.getString(WebApiConstants.RESPONSE_ITEM_ICON);
+                boolean hidden = achievementJSON.getInt(WebApiConstants.RESPONSE_ITEM_HIDDEN) == 1 ? true : false;
 
                 GameAchievement achievement = new GameAchievement(name, defaultValue, displayName, description, iconOpenUrl, iconClosedUrl, hidden);
 
@@ -218,7 +218,7 @@ public class UserStatsBuilder {
      */
     public UserStats buildUserStatsForGame(long steamId, int appId, JSONObject data) throws ParseException {
         try {
-            JSONObject playerstatsObject = data.getJSONObject("playerstats");
+            JSONObject playerstatsObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_PLAYER_STATS);
             String gameName = playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 
             Map<String, Integer> userStatList = buildUserStats(playerstatsObject);
@@ -258,7 +258,7 @@ public class UserStatsBuilder {
                 JSONObject statJSON = statsJSON.getJSONObject(i);
 
                 String name = statJSON.getString(WebApiConstants.RESPONSE_ITEM_NAME);
-                int value = statJSON.getInt("value");
+                int value = statJSON.getInt(WebApiConstants.RESPONSE_ITEM_VALUE);
 
                 stats.put(name, value);
             }

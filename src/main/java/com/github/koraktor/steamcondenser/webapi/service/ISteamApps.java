@@ -69,7 +69,7 @@ public class ISteamApps {
      */
     public UpToDateCheck upToDateCheck(int appId, int versionNumberToCheck) throws WebApiException {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+        params.put(WebApiConstants.APP_ID, Integer.toString(appId));
         params.put(WebApiConstants.REQUEST_PARAM_VERSION, Integer.toString(versionNumberToCheck));
 
         try {

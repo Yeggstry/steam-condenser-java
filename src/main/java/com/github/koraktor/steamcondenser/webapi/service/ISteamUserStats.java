@@ -85,7 +85,7 @@ public class ISteamUserStats {
      */
     public int getNumberOfCurrentPlayers(int appId) throws WebApiException {
         Map<String, Object> params = new HashMap<String,Object>();
-        params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+        params.put(WebApiConstants.APP_ID, Integer.toString(appId));
 
         try {
             JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params);
@@ -127,7 +127,7 @@ public class ISteamUserStats {
     public PlayerAchievements getPlayerAchievements(long steamId, int appId, String language) throws WebApiException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
-        params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+        params.put(WebApiConstants.APP_ID, Integer.toString(appId));
         if (language != null && language.length() > 0) {
             params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language);
         }
@@ -175,7 +175,7 @@ public class ISteamUserStats {
             return gameStatsSchemasCache.get(appId);
         } else {
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+            params.put(WebApiConstants.APP_ID, Integer.toString(appId));
             if (language != null && language.length() > 0) {
                 params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language);
             }
@@ -206,7 +206,7 @@ public class ISteamUserStats {
     public UserStats getUserStatsForGame(long steamId, int appId) throws WebApiException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
-        params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
+        params.put(WebApiConstants.APP_ID, Integer.toString(appId));
         try {
             JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_USER_STATS_FOR_GAME, 2, params);
             return userStatsBuilder.buildUserStatsForGame(steamId, appId, data);

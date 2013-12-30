@@ -84,7 +84,7 @@ public class IPlayerService {
         params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
         try {
             JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_STEAM_LEVEL, 1, params);
-            return data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getInt("player_level");
+            return data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE).getInt(WebApiConstants.RESPONSE_ITEM_PLAYER_LEVEL);
         } catch(JSONException e) {
             throw new WebApiException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
@@ -110,7 +110,7 @@ public class IPlayerService {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
         if(badgeId > -1) {
-            params.put(WebApiConstants.REQUEST_PARAM_BADGE_ID, Long.toString(badgeId));
+            params.put(WebApiConstants.BADGE_ID, Long.toString(badgeId));
         }
 
         try {
