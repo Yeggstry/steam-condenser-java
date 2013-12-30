@@ -51,213 +51,213 @@ import com.github.koraktor.steamcondenser.webapi.userstats.UserStats;
 @PrepareForTest(WebApi.class)
 @RunWith(PowerMockRunner.class)
 public class ISteamUserStatsTest {
-	private static final int STEAM_ID = 12345;
-	private static final String LANG_EN = "en";
-	private static final int APPID_TF2 = 440;
-	private ISteamUserStats iSteamUserStats;
-	private UserStatsBuilder userStatsBuilder;
-	
-	@Before
-	public void setup() {
+    private static final int STEAM_ID = 12345;
+    private static final String LANG_EN = "en";
+    private static final int APPID_TF2 = 440;
+    private ISteamUserStats iSteamUserStats;
+    private UserStatsBuilder userStatsBuilder;
+
+    @Before
+    public void setup() {
         userStatsBuilder = mock(UserStatsBuilder.class);
-		iSteamUserStats = new ISteamUserStats(userStatsBuilder);
+        iSteamUserStats = new ISteamUserStats(userStatsBuilder);
         mockStatic(WebApi.class);
-	}
+    }
 
-	private String loadFileAsString(String path) throws IOException {
-		URL resource = this.getClass().getResource(path);
-		File resourceFile = new File(resource.getFile());
-		return FileUtils.readFileToString(resourceFile, "UTF-8");
-	}
+    private String loadFileAsString(String path) throws IOException {
+        URL resource = this.getClass().getResource(path);
+        File resourceFile = new File(resource.getFile());
+        return FileUtils.readFileToString(resourceFile, "UTF-8");
+    }
 
-	/* Tests for GetGlobalAchievementPercentagesForApp */
+    /* Tests for GetGlobalAchievementPercentagesForApp */
     @Test
     public void testGlobalAchievementPercentagesForAppCache() throws JSONException, WebApiException, ParseException  {
-		JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
+        JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
 
-		GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
-		when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);
-		
-		GlobalAchievements globalAchievementPercentagesForApp = iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
-		GlobalAchievements globalAchievementPercentagesForApp2 = iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
-		assertTrue(globalAchievementPercentagesForApp == globalAchievementPercentagesForApp2);
-		
-		verify(userStatsBuilder).buildGlobalAchievements(APPID_TF2, globalPercentagesDocument);
+        GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
+        when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);
+
+        GlobalAchievements globalAchievementPercentagesForApp = iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
+        GlobalAchievements globalAchievementPercentagesForApp2 = iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
+        assertTrue(globalAchievementPercentagesForApp == globalAchievementPercentagesForApp2);
+
+        verify(userStatsBuilder).buildGlobalAchievements(APPID_TF2, globalPercentagesDocument);
     }
 
 
-	/* Tests for GetNumberOfCurrentPlayers */
-	@Test
-	public void testGetNumberOfCurrentPlayers() throws WebApiException, JSONException, IOException {
-		JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetCurrentNumberOfPlayers.v1.json"));
-		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
+    /* Tests for GetNumberOfCurrentPlayers */
+    @Test
+    public void testGetNumberOfCurrentPlayers() throws WebApiException, JSONException, IOException {
+        JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetCurrentNumberOfPlayers.v1.json"));
+        Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params)).thenReturn(numberOfPlayersDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params)).thenReturn(numberOfPlayersDocument);
 
-		int numberOfPlayers = iSteamUserStats.getNumberOfCurrentPlayers(440);
-		assertEquals(68532, numberOfPlayers);
-	}
-	
-	/* Tests for GetPlayerAchievements */
-	@Test
-	public void testGetPlayerAchievements() throws WebApiException, JSONException, ParseException, RequestFailedException {
-		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(STEAM_ID));
-		params.put("appid", Integer.toString(APPID_TF2));
-		params.put("l", LANG_EN);
+        int numberOfPlayers = iSteamUserStats.getNumberOfCurrentPlayers(440);
+        assertEquals(68532, numberOfPlayers);
+    }
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
+    /* Tests for GetPlayerAchievements */
+    @Test
+    public void testGetPlayerAchievements() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
+        params.put("l", LANG_EN);
 
-		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
-		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN, playerAchievementsDocument)).thenReturn(playerAchievements);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
 
-		iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN);
-		
-		verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN, playerAchievementsDocument);
-	}
+        PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
+        when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN, playerAchievementsDocument)).thenReturn(playerAchievements);
 
-	@Test
-	public void testGetPlayerAchievementsNullLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
-		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(STEAM_ID));
-		params.put("appid", Integer.toString(APPID_TF2));
+        iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN);
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
+        verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, LANG_EN, playerAchievementsDocument);
+    }
 
-		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
-		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, null, playerAchievementsDocument)).thenReturn(playerAchievements);
+    @Test
+    public void testGetPlayerAchievementsNullLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
 
-		iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2);
-		
-		verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, null, playerAchievementsDocument);
-	}
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
 
-	@Test
-	public void testGetPlayerAchievementsEmptyLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
-		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(STEAM_ID));
-		params.put("appid", Integer.toString(APPID_TF2));
+        PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
+        when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, null, playerAchievementsDocument)).thenReturn(playerAchievements);
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
+        iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2);
 
-		PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
-		when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument)).thenReturn(playerAchievements);
+        verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, null, playerAchievementsDocument);
+    }
 
-		iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2, "");
-		
-		verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument);
-	}
+    @Test
+    public void testGetPlayerAchievementsEmptyLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
 
-	/* Tests for GetStatsSchemaForGame */
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenReturn(playerAchievementsDocument);
+
+        PlayerAchievements playerAchievements = mock(PlayerAchievements.class);
+        when(userStatsBuilder.buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument)).thenReturn(playerAchievements);
+
+        iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2, "");
+
+        verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument);
+    }
+
+    /* Tests for GetStatsSchemaForGame */
     @Test
     public void testGameSchemaCache() throws JSONException, SteamCondenserException  {
-		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("appid", Integer.toString(APPID_TF2));
-		params.put("l", LANG_EN);
+        JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("appid", Integer.toString(APPID_TF2));
+        params.put("l", LANG_EN);
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
-		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
-		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
-		
-		assertTrue(iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN) == iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN));
+        GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
+        when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
 
-		verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument);
+        assertTrue(iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN) == iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN));
+
+        verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument);
     }
 
-	@Test
-	public void testGetSchemaForGameNoLanguage() throws JSONException, SteamCondenserException {
-		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
+    @Test
+    public void testGetSchemaForGameNoLanguage() throws JSONException, SteamCondenserException {
+        JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
-		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
-		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, null, schemaForGameDocument)).thenReturn(gameStatsSchema);
+        GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
+        when(userStatsBuilder.buildSchemaForGame(APPID_TF2, null, schemaForGameDocument)).thenReturn(gameStatsSchema);
 
-		iSteamUserStats.getSchemaForGame(APPID_TF2);
+        iSteamUserStats.getSchemaForGame(APPID_TF2);
 
-		verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, null, schemaForGameDocument);
-	}
+        verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, null, schemaForGameDocument);
+    }
 
-	@Test
-	public void testGetSchemaForGameEmptyLanguage() throws JSONException, IOException, SteamCondenserException {
-		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
+    @Test
+    public void testGetSchemaForGameEmptyLanguage() throws JSONException, IOException, SteamCondenserException {
+        JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
 
-		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
-		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, "", schemaForGameDocument)).thenReturn(gameStatsSchema);
+        GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
+        when(userStatsBuilder.buildSchemaForGame(APPID_TF2, "", schemaForGameDocument)).thenReturn(gameStatsSchema);
 
-		iSteamUserStats.getSchemaForGame(APPID_TF2, "");
+        iSteamUserStats.getSchemaForGame(APPID_TF2, "");
 
-		verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, "", schemaForGameDocument);
-	}
-	
-	/* Tests for GetUserStatsForGame */
-	@Test
-	public void testGetUserStatsForGame() throws WebApiException, JSONException, ParseException {
-		JSONObject userStatsForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("steamid", Long.toString(STEAM_ID));
-		params.put("appid", Integer.toString(APPID_TF2));
+        verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, "", schemaForGameDocument);
+    }
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_USER_STATS_FOR_GAME, 2, params)).thenReturn(userStatsForGameDocument);
+    /* Tests for GetUserStatsForGame */
+    @Test
+    public void testGetUserStatsForGame() throws WebApiException, JSONException, ParseException {
+        JSONObject userStatsForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
 
-		UserStats userStats = mock(UserStats.class);
-		when(userStatsBuilder.buildUserStatsForGame(STEAM_ID, APPID_TF2, userStatsForGameDocument)).thenReturn(userStats);
-		
-		iSteamUserStats.getUserStatsForGame(STEAM_ID, APPID_TF2);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_USER_STATS_FOR_GAME, 2, params)).thenReturn(userStatsForGameDocument);
 
-		verify(userStatsBuilder).buildUserStatsForGame(STEAM_ID, APPID_TF2, userStatsForGameDocument);
-	}
-	
-	@Test
-	public void testClearGameStatsSchemaCache() throws JSONException, SteamCondenserException {
-		JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("appid", Integer.toString(APPID_TF2));
-		params.put("l", LANG_EN);
+        UserStats userStats = mock(UserStats.class);
+        when(userStatsBuilder.buildUserStatsForGame(STEAM_ID, APPID_TF2, userStatsForGameDocument)).thenReturn(userStats);
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
+        iSteamUserStats.getUserStatsForGame(STEAM_ID, APPID_TF2);
 
-		GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
-		when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
-		
-		iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN);
-		
-		iSteamUserStats.clearGameStatsSchemaCache();
-		
-		iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN);
+        verify(userStatsBuilder).buildUserStatsForGame(STEAM_ID, APPID_TF2, userStatsForGameDocument);
+    }
 
-		verify(userStatsBuilder, times(2)).buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument);		
-	}
+    @Test
+    public void testClearGameStatsSchemaCache() throws JSONException, SteamCondenserException {
+        JSONObject schemaForGameDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("appid", Integer.toString(APPID_TF2));
+        params.put("l", LANG_EN);
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenReturn(schemaForGameDocument);
+
+        GameStatsSchema gameStatsSchema = mock(GameStatsSchema.class);
+        when(userStatsBuilder.buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument)).thenReturn(gameStatsSchema);
+
+        iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN);
+
+        iSteamUserStats.clearGameStatsSchemaCache();
+
+        iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN);
+
+        verify(userStatsBuilder, times(2)).buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument);
+    }
 
     @Test
     public void testClearGlobalAchievementPercentagesForAppCache() throws JSONException, WebApiException, ParseException  {
-		JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
-		Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
+        JSONObject globalPercentagesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
+        Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
 
-		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenReturn(globalPercentagesDocument);
 
-		GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
-		when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);
-		
-		iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
-		
-		iSteamUserStats.clearGlobalAchievementPercentagesForAppCache();
-		
-		iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
-		
-		verify(userStatsBuilder, times(2)).buildGlobalAchievements(APPID_TF2, globalPercentagesDocument);
+        GlobalAchievements globalAchievements = mock(GlobalAchievements.class);
+        when(userStatsBuilder.buildGlobalAchievements(APPID_TF2, globalPercentagesDocument)).thenReturn(globalAchievements);
+
+        iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
+
+        iSteamUserStats.clearGlobalAchievementPercentagesForAppCache();
+
+        iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
+
+        verify(userStatsBuilder, times(2)).buildGlobalAchievements(APPID_TF2, globalPercentagesDocument);
     }
 
 }

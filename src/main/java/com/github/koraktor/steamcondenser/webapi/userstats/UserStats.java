@@ -20,99 +20,99 @@ import java.util.TreeMap;
  * @author Sebastian Staudt
  */
 public class UserStats {
-	private final String gameName;
-	
-	private final long steamId;
+    private final String gameName;
+
+    private final long steamId;
     private final int appId;
-    
+
     private final Map<String, Integer> stats;
 
-	/* 
-	 * Only closed achievements are provided in the GetUserStatsForGame operation. For a complete list,
-	 * see GetPlayerAchievements operation.
-	 */
-	private final List<String> closedAchievements;
+    /* 
+     * Only closed achievements are provided in the GetUserStatsForGame operation. For a complete list,
+     * see GetPlayerAchievements operation.
+     */
+    private final List<String> closedAchievements;
 
-	/**
-	 * Create an immutable object containing all user stats and closed achievements for a particular app.
-	 * 
-	 * @param steamId The 64bit SteamID of the player
-	 * @param appId The unique Steam Application ID of the game (e.g.
+    /**
+     * Create an immutable object containing all user stats and closed achievements for a particular app.
+     * 
+     * @param steamId The 64bit SteamID of the player
+     * @param appId The unique Steam Application ID of the game (e.g.
      *        <code>440</code> for Team Fortress 2). See
      *        http://developer.valvesoftware.com/wiki/Steam_Application_IDs for
      *        all application IDs
-	 * @param gameName the full name of this game
-	 * @param stats a map of user stat's for this app.
-	 * @param closedAchievements a list of achievement keys that the user has achieved for this app.
-	 */
-	public UserStats(long steamId, int appId, String gameName, Map<String, Integer> stats, List<String> closedAchievements) {
-		this.steamId = steamId;
-		this.appId = appId;
-		this.gameName = gameName;
-		this.stats = new TreeMap<String, Integer>(stats);
-		this.closedAchievements = new ArrayList<String>(closedAchievements);
-	}
+     * @param gameName the full name of this game
+     * @param stats a map of user stat's for this app.
+     * @param closedAchievements a list of achievement keys that the user has achieved for this app.
+     */
+    public UserStats(long steamId, int appId, String gameName, Map<String, Integer> stats, List<String> closedAchievements) {
+        this.steamId = steamId;
+        this.appId = appId;
+        this.gameName = gameName;
+        this.stats = new TreeMap<String, Integer>(stats);
+        this.closedAchievements = new ArrayList<String>(closedAchievements);
+    }
 
     /**
      * Determines whether the user have any stats for this game
      *
      * @return a boolean that indicates if the user has any stats for this game
      */
-	public boolean hasStats() {
-		return !stats.isEmpty();
-	}
+    public boolean hasStats() {
+        return !stats.isEmpty();
+    }
 
     /**
      * Determines whether the user have any closed achievements for this game
      *
      * @return a boolean that indicates if the user has any closed achievements for this game
      */
-	public boolean hasAchievements() {
-		return !closedAchievements.isEmpty();
-	}
+    public boolean hasAchievements() {
+        return !closedAchievements.isEmpty();
+    }
 
-	/**
-	 * Returns a map of game stats for this user.
-	 * 
-	 * @return a map of game stats for this user.
-	 */
-	public Map<String, Integer> getStats() {
-		return stats;
-	}
-	
+    /**
+     * Returns a map of game stats for this user.
+     * 
+     * @return a map of game stats for this user.
+     */
+    public Map<String, Integer> getStats() {
+        return stats;
+    }
+
     /**
      * Returns the Steam Application ID of the game these user stats belong to
      *
      * @return The application ID of the game these user stats belong to
      */
-	public int getAppId() {
-		return appId;
-	}
+    public int getAppId() {
+        return appId;
+    }
 
     /**
      * Returns the full name of this game
      *
      * @return The full name of this game
      */
-	public String getGameName() {
-		return gameName;
-	}
-	
-	/**
-	 * Returns the list of achievement keys that the user has achieved for this game.
-	 * 
-	 * @return the list of achievement keys that the user has achieved for this game.
-	 */
-	public List<String> getClosedAchievements() {
-		return closedAchievements;
-	}
-	
+    public String getGameName() {
+        return gameName;
+    }
+
+    /**
+     * Returns the list of achievement keys that the user has achieved for this game.
+     * 
+     * @return the list of achievement keys that the user has achieved for this game.
+     */
+    public List<String> getClosedAchievements() {
+        return closedAchievements;
+    }
+
     /**
      * Returns the 64bit steam ID of the user these achievements belong to
      *
      * @return The 64bit steam ID of the user these achievements belong to
      */
-	public long getSteamId() {
-		return steamId;
-	}
+    public long getSteamId() {
+        return steamId;
+    }
 }

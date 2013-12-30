@@ -20,14 +20,14 @@ import com.github.koraktor.steamcondenser.exceptions.WebApiException;
  * @author Sebastian Staudt
  */
 public class ParseException extends WebApiException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new <code>ParseException</code> instance
      *
      * @param message The message to attach to the exception
      */
-	public ParseException(String message, Throwable cause) {
+    public ParseException(String message, Throwable cause) {
         super(message, cause);
     }
 }

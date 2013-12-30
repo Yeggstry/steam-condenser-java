@@ -3,38 +3,38 @@ package com.github.koraktor.steamcondenser.webapi.playerservice;
 import java.util.List;
 
 public class PlayerBadgeDetails {
-	private final long currentXp, xpNeededToLevelUp, xpNeededForCurrentLevel;
-	private final int level;
-	private List<Badge> badges;
-	
-	public PlayerBadgeDetails(long currentXp, int level, long xpNeededToLevelUp, long xpNeededForCurrentLevel) {
-		this.currentXp = currentXp;
-		this.level = level;
-		this.xpNeededToLevelUp = xpNeededToLevelUp;
-		this.xpNeededForCurrentLevel = xpNeededForCurrentLevel;
-	}
+    private final long currentXp, xpNeededToLevelUp, xpNeededForCurrentLevel;
+    private final int level;
+    private List<Badge> badges;
 
-	public long getCurrentXp() {
-		return currentXp;
-	}
+    public PlayerBadgeDetails(long currentXp, int level, long xpNeededToLevelUp, long xpNeededForCurrentLevel) {
+        this.currentXp = currentXp;
+        this.level = level;
+        this.xpNeededToLevelUp = xpNeededToLevelUp;
+        this.xpNeededForCurrentLevel = xpNeededForCurrentLevel;
+    }
 
-	public int getLevel() {
-		return level;
-	}
+    public long getCurrentXp() {
+        return currentXp;
+    }
 
-	public long getXpNeededToLevelUp() {
-		return xpNeededToLevelUp;
-	}
+    public int getLevel() {
+        return level;
+    }
 
-	public long getXpNeededForCurrentLevel() {
-		return xpNeededForCurrentLevel;
-	}
+    public long getXpNeededToLevelUp() {
+        return xpNeededToLevelUp;
+    }
 
-	public List<Badge> getBadges() {
-		return badges;
-	}
+    public long getXpNeededForCurrentLevel() {
+        return xpNeededForCurrentLevel;
+    }
 
-	public void setBadges(List<Badge> badges) {
-		this.badges = badges;
-	}
+    public List<Badge> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(List<Badge> badges) {
+        this.badges = badges;
+    }
 }

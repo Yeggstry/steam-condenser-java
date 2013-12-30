@@ -16,37 +16,37 @@ import com.github.koraktor.steamcondenser.webapi.playerservice.OwnedGames;
  * Test class for the check of whether the player owned games include app info
  */
 public class OwnedGamesTest {
-	private OwnedGames ownedGames;
+    private OwnedGames ownedGames;
 
-	@Test
-	public void testDoPlayerOwnedGamesIncludeAppInfoNullOwnedGames() {
-		ownedGames = new OwnedGames(0, null);
-		assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
-	}
-	
-	@Test
-	public void testDoPlayerOwnedGamesIncludeAppInfoEmptyOwnedGames() {
-		ownedGames = new OwnedGames(0, new ArrayList<OwnedGame>());
-		assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
-	}
+    @Test
+    public void testDoPlayerOwnedGamesIncludeAppInfoNullOwnedGames() {
+        ownedGames = new OwnedGames(0, null);
+        assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+    }
 
-	@Test
-	public void testDoPlayerOwnedGamesIncludeAppInfoOwnedGames() {
-		OwnedGame ownedGame = new OwnedGame(32460, 0, 0);
-		List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
-		ownedGamesList.add(ownedGame);
+    @Test
+    public void testDoPlayerOwnedGamesIncludeAppInfoEmptyOwnedGames() {
+        ownedGames = new OwnedGames(0, new ArrayList<OwnedGame>());
+        assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+    }
 
-		ownedGames = new OwnedGames(0, ownedGamesList);
-		assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
-	}
+    @Test
+    public void testDoPlayerOwnedGamesIncludeAppInfoOwnedGames() {
+        OwnedGame ownedGame = new OwnedGame(32460, 0, 0);
+        List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
+        ownedGamesList.add(ownedGame);
 
-	@Test
-	public void testDoPlayerOwnedGamesIncludeAppInfoOwnedGamesWithAppInfo() {
-		OwnedGameWithAppInfo ownedGame = new OwnedGameWithAppInfo(32460, 0, 0, "Monkey Island 2: Special Edition", "3ff954e2286123d0d4cf91dfca57e62a0b7248a9", "520648565e99a6a8afa4f92a55dc4a3d39400768");
-		List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
-		ownedGamesList.add(ownedGame);
+        ownedGames = new OwnedGames(0, ownedGamesList);
+        assertFalse(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+    }
 
-		ownedGames = new OwnedGames(0, ownedGamesList);
-		assertTrue(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
-	}
+    @Test
+    public void testDoPlayerOwnedGamesIncludeAppInfoOwnedGamesWithAppInfo() {
+        OwnedGameWithAppInfo ownedGame = new OwnedGameWithAppInfo(32460, 0, 0, "Monkey Island 2: Special Edition", "3ff954e2286123d0d4cf91dfca57e62a0b7248a9", "520648565e99a6a8afa4f92a55dc4a3d39400768");
+        List<OwnedGame> ownedGamesList = new ArrayList<OwnedGame>();
+        ownedGamesList.add(ownedGame);
+
+        ownedGames = new OwnedGames(0, ownedGamesList);
+        assertTrue(ownedGames.doesPlayerOwnedGamesIncludeAppInfo());
+    }
 }

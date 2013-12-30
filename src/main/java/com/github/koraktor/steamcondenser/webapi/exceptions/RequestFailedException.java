@@ -13,7 +13,7 @@ import com.github.koraktor.steamcondenser.exceptions.WebApiException;
  * This exception is raised when there is no positive data in a Steam Web API response.
  * Reasons why this exception can be thrown include:
  * <li>
- * 	<ul>A data error in the call to GetPlayerAchievements e.g. requested app has no stats.</ul>
+ *  <ul>A data error in the call to GetPlayerAchievements e.g. requested app has no stats.</ul>
  *  <ul>No schema for app in call to GetSchemaForGame</ul>
  * </li>
  * 
@@ -24,14 +24,14 @@ import com.github.koraktor.steamcondenser.exceptions.WebApiException;
  * @author Sebastian Staudt
  */
 public class RequestFailedException extends WebApiException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new <code>RequestFailedException</code> instance
      *
      * @param message The message to attach to the exception
      */
-	public RequestFailedException(String message) {
-		super(message);
-	}
+    public RequestFailedException(String message) {
+        super(message);
+    }
 }
