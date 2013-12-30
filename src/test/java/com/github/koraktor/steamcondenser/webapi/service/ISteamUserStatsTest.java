@@ -92,7 +92,7 @@ public class ISteamUserStatsTest {
 	/* Tests for GetNumberOfCurrentPlayers */
 	@Test
 	public void testGetNumberOfCurrentPlayers() throws WebApiException, JSONException, IOException {
-		JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("ISteamUserStats/getCurrentNumberOfPlayers.v1.json"));
+		JSONObject numberOfPlayersDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetCurrentNumberOfPlayers.v1.json"));
 		Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
 
 		when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params)).thenReturn(numberOfPlayersDocument);
