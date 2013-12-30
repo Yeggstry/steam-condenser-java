@@ -41,8 +41,7 @@ public class PlayerServiceBuilder {
         	JSONArray gamesData = responseObject.getJSONArray("games");
 
 			List<OwnedGameWithAppInfo> recentlyPlayedGamesList = buildOwnedGameListWithAppInfo(gamesData);
-			OwnedGames recentlyPlayedGames = new OwnedGames(totalCount, recentlyPlayedGamesList);
-    		return recentlyPlayedGames;
+			return new OwnedGames(totalCount, recentlyPlayedGamesList);
         } catch(JSONException e) {
             throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
@@ -68,8 +67,7 @@ public class PlayerServiceBuilder {
                 OwnedGame playerOwnedGame = new OwnedGame(appId, playtime2Weeks, playtimeForever);
                 ownedGamesList.add(playerOwnedGame);
             }
-            OwnedGames playerOwnedGames = new OwnedGames(gameCount, ownedGamesList);
-    		return playerOwnedGames;
+            return new OwnedGames(gameCount, ownedGamesList);
         } catch(JSONException e) {
             throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }
@@ -82,8 +80,7 @@ public class PlayerServiceBuilder {
         	JSONArray gamesData = responseObject.getJSONArray("games");
 
 			List<OwnedGameWithAppInfo> ownedGamesList = buildOwnedGameListWithAppInfo(gamesData);
-            OwnedGames ownedGames = new OwnedGames(gameCount, ownedGamesList);
-    		return ownedGames;
+            return new OwnedGames(gameCount, ownedGamesList);
         } catch(JSONException e) {
             throw new ParseException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
         }

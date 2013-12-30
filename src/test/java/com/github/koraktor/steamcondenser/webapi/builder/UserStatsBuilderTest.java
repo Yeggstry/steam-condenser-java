@@ -25,7 +25,7 @@ import org.junit.Test;
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.builder.UserStatsBuilder;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameAchievement;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStat;
@@ -55,7 +55,7 @@ public class UserStatsBuilderTest {
 	@Test
 	public void testBuildGlobalAchievements() throws JSONException, IOException, ParseException {
 		JSONObject globalPercentagesDocument = new JSONObject(
-				loadFileAsString("ISteamUserStats/getGlobalAchievementPercentagesForApp.v2.json"));
+				loadFileAsString("ISteamUserStats/GetGlobalAchievementPercentagesForApp.v2.json"));
 
 		GlobalAchievements globalAchievements = userStatsBuilder.buildGlobalAchievements(440, globalPercentagesDocument);
 
@@ -67,7 +67,7 @@ public class UserStatsBuilderTest {
 	@Test
 	public void testBuildGlobalAchievementsNoAchivements() throws JSONException, IOException, ParseException {
 		JSONObject globalPercentagesDocument = new JSONObject(
-				loadFileAsString("ISteamUserStats/getGlobalAchievementPercentagesForApp.NoAchievements.v2.json"));
+				loadFileAsString("ISteamUserStats/GetGlobalAchievementPercentagesForApp.NoAchievements.v2.json"));
 
 		GlobalAchievements globalAchievements = userStatsBuilder.buildGlobalAchievements(440, globalPercentagesDocument);
 
@@ -89,8 +89,8 @@ public class UserStatsBuilderTest {
 
 	/* Tests for getPlayerAchievements */
 	@Test
-	public void testBuildPlayerAchievements() throws JSONException, IOException, ParseException, DataException {
-		JSONObject playerAchievementsDocument = new JSONObject(loadFileAsString("ISteamUserStats/getPlayerAchievements.v1.json"));
+	public void testBuildPlayerAchievements() throws JSONException, IOException, WebApiException {
+		JSONObject playerAchievementsDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetPlayerAchievements.v1.json"));
 
 		PlayerAchievements playerAchievements = userStatsBuilder.buildPlayerAchievements(12345, 440, "en", playerAchievementsDocument);
 
@@ -109,13 +109,13 @@ public class UserStatsBuilderTest {
 	}
 
 	@Test
-	public void testBuildPlayerAchievementsNoAchievements() throws JSONException {
+	public void testBuildPlayerAchievementsNoAchievements() throws JSONException, WebApiException {
 		JSONObject playerAchievementsDocument = new JSONObject("{ \"playerstats\": { \"error\": \"Requested app has no stats\", \"success\": false } }");
 
 		try {
 			userStatsBuilder.buildPlayerAchievements(12345, 48240, "en", playerAchievementsDocument);
 			fail("Exception should be thrown when calling getPlayerAchievements with an invalid appId.");
-		} catch (DataException e) {
+		} catch (RequestFailedException e) {
 			assertEquals("Requested app has no stats", e.getMessage());
 		} catch (ParseException e) {
 			fail("Exception should be thrown when calling getPlayerAchievements with an invalid appId.");
@@ -136,7 +136,7 @@ public class UserStatsBuilderTest {
 
 	@Test
 	public void testBuildSchemaForGame() throws JSONException, IOException, SteamCondenserException {
-		JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/getSchemaForGame.v2.json"));
+		JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.v2.json"));
 
 		GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
 
@@ -174,6 +174,26 @@ public class UserStatsBuilderTest {
 
 	@Test
 	public void testBuildSchemaForGameNoStats() throws JSONException, IOException, SteamCondenserException {
+		JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.NoStats.v2.json"));
+
+		GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+
+		assertTrue(gameStatsSchema.hasAchievements());
+		assertFalse(gameStatsSchema.hasStats());
+	}
+
+	@Test
+	public void testBuildSchemaForGameNoAchievements() throws JSONException, IOException, SteamCondenserException {
+		JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.NoAchievements.v2.json"));
+
+		GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+
+		assertFalse(gameStatsSchema.hasAchievements());
+		assertTrue(gameStatsSchema.hasStats());
+	}
+
+	@Test
+	public void testBuildSchemaForGameNoStatsOrAchievements() throws JSONException, IOException, SteamCondenserException {
 		JSONObject schemaForGameDocument = new JSONObject("{	\"game\": {	\"gameName\": \"testGameName\", \"gameVersion\": 1, \"availableGameStats\": { } } }");
 
 		GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
@@ -219,7 +239,7 @@ public class UserStatsBuilderTest {
 
 	@Test
 	public void testBuildUserStatsForGame() throws WebApiException, JSONException, IOException, ParseException {
-		JSONObject userStatsForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/getUserStatsForGame.v2.json"));
+		JSONObject userStatsForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetUserStatsForGame.v2.json"));
 
 		UserStats userStats = userStatsBuilder.buildUserStatsForGame(12345, 440, userStatsForGameDocument);
 

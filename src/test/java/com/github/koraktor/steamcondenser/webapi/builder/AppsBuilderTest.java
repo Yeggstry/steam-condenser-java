@@ -25,10 +25,11 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.webapi.apps.UpToDateCheck;
 import com.github.koraktor.steamcondenser.webapi.builder.AppsBuilder;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 
 /**
@@ -109,7 +110,7 @@ public class AppsBuilderTest {
 	}
 	
 	@Test
-	public void testBuildServersAtAddress() throws JSONException, IOException, DataException, ParseException {
+	public void testBuildServersAtAddress() throws JSONException, IOException, WebApiException {
 		JSONObject serversAtAddressDocument = new JSONObject(loadFileAsString("ISteamApps/GetServersAtAddress.v1.json"));
 
 		List<ServerAtAddress> serversAtAddress = appsBuilder.buildServersAtAddress("85.236.100.104", serversAtAddressDocument);
@@ -128,19 +129,19 @@ public class AppsBuilderTest {
 	}
 	
 	@Test
-	public void testBuildServersAtAddressInvalidIp() throws JSONException, IOException, ParseException {
+	public void testBuildServersAtAddressInvalidIp() throws JSONException, IOException, WebApiException {
 		JSONObject serversAtAddressDocument = new JSONObject("{	\"response\": {	\"success\": false,	\"message\": true } }");
 
 		try {
 			appsBuilder.buildServersAtAddress("invalidIp", serversAtAddressDocument);
 			fail("Exception should be thrown when calling build servers at address with an invalid IP.");
-		} catch (DataException e) {
+		} catch (RequestFailedException e) {
 			assertEquals("Invalid IP address: invalidIp", e.getMessage());
 		}
 	}
 
 	@Test
-	public void testBuildServersAtAddressInvalidJSON() throws JSONException, DataException {
+	public void testBuildServersAtAddressInvalidJSON() throws JSONException, WebApiException {
 		JSONObject serversAtAddressDocument = new JSONObject("{ }");
 
 		try {

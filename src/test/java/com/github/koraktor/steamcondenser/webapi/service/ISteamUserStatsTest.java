@@ -36,7 +36,7 @@ import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.builder.UserStatsBuilder;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStatsSchema;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GlobalAchievements;
@@ -103,7 +103,7 @@ public class ISteamUserStatsTest {
 	
 	/* Tests for GetPlayerAchievements */
 	@Test
-	public void testGetPlayerAchievements() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetPlayerAchievements() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));
@@ -121,7 +121,7 @@ public class ISteamUserStatsTest {
 	}
 
 	@Test
-	public void testGetPlayerAchievementsNullLanguage() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetPlayerAchievementsNullLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));
@@ -138,7 +138,7 @@ public class ISteamUserStatsTest {
 	}
 
 	@Test
-	public void testGetPlayerAchievementsEmptyLanguage() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetPlayerAchievementsEmptyLanguage() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject playerAchievementsDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));

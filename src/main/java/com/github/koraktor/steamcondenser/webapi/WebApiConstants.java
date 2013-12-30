@@ -1,6 +1,8 @@
 package com.github.koraktor.steamcondenser.webapi;
 
 public class WebApiConstants {
+	private WebApiConstants() {}
+	
 	/*
 	 * Constants for interfaces
 	 */

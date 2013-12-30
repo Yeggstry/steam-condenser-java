@@ -16,11 +16,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.apps.ServerAtAddress;
 import com.github.koraktor.steamcondenser.webapi.apps.UpToDateCheck;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 
 /**
  * Builder class to create object representations of the ISteamApps Web API responses.
@@ -89,14 +90,14 @@ public class AppsBuilder {
 	 * @param ip the requested IP address.
 	 * @param data The response from the GetServersAtAddress request, in JSON form.
 	 * @return A list of servers at a specified IP address.
-	 * @throws DataException if an error has been returned in the response. In this case, the "success" value in the response is false.
+	 * @throws RequestFailedException if an error has been returned in the response. In this case, the "success" value in the response is false.
 	 * @throws ParseException if the JSON cannot be parsed as expected.
 	 */
-	public List<ServerAtAddress> buildServersAtAddress(String ip, JSONObject data) throws DataException, ParseException {
+	public List<ServerAtAddress> buildServersAtAddress(String ip, JSONObject data) throws WebApiException {
         try {
         	JSONObject response = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_RESPONSE);
         	if(!response.getBoolean("success")) {
-				throw new DataException(String.format("Invalid IP address: %s",ip));
+				throw new RequestFailedException(String.format("Invalid IP address: %s",ip));
         	}
         	
         	List<ServerAtAddress> serversAtAddress = new ArrayList<ServerAtAddress>();

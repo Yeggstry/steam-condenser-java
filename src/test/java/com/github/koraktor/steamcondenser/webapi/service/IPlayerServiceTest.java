@@ -33,7 +33,7 @@ import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
 import com.github.koraktor.steamcondenser.webapi.builder.PlayerServiceBuilder;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.playerservice.OwnedGames;
 import com.github.koraktor.steamcondenser.webapi.playerservice.PlayerBadgeDetails;
@@ -149,7 +149,7 @@ public class IPlayerServiceTest {
 
 	/* Tests for GetBadges */
 	@Test
-	public void testGetBadges() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetBadges() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject badgesDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));
@@ -166,7 +166,7 @@ public class IPlayerServiceTest {
 
 	/* Tests for GetCommunityBadgeProgress */
 	@Test
-	public void testGetCommunityBadgeProgress() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetCommunityBadgeProgress() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject communityBadgeProgressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));
@@ -184,7 +184,7 @@ public class IPlayerServiceTest {
 
 	/* Tests for GetCommunityBadgeProgress */
 	@Test
-	public void testGetCommunityBadgeProgressWithBadgeId() throws WebApiException, JSONException, ParseException, DataException {
+	public void testGetCommunityBadgeProgressWithBadgeId() throws WebApiException, JSONException, ParseException, RequestFailedException {
 		JSONObject communityBadgeProgressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("steamid", Long.toString(STEAM_ID));

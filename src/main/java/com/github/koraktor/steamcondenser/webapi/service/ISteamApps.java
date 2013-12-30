@@ -46,10 +46,13 @@ public class ISteamApps {
 	 * @throws WebApiException if there is a general service error (e.g. no key supplied)
 	 * @throws JSONException if the JSON returned from the service is malformed.
 	 */
-	public Map<Long,String> getAppList() throws WebApiException, JSONException {
-		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_APP_LIST, 2, null);
-
-		return appsBuilder.buildAppList(data);
+	public Map<Long,String> getAppList() throws WebApiException {
+		try {
+			JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_APP_LIST, 2, null);
+			return appsBuilder.buildAppList(data);
+        } catch(JSONException e) {
+            throw new WebApiException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
 	}
 
 	/**
@@ -64,13 +67,17 @@ public class ISteamApps {
 	 * @throws WebApiException if there is a general service error (e.g. no key supplied)
 	 * @throws JSONException if the JSON returned from the service is malformed.
 	 */
-	public UpToDateCheck upToDateCheck(int appId, int versionNumberToCheck) throws WebApiException, JSONException {
+	public UpToDateCheck upToDateCheck(int appId, int versionNumberToCheck) throws WebApiException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(WebApiConstants.REQUEST_PARAM_APPID, Integer.toString(appId));
 		params.put(WebApiConstants.REQUEST_PARAM_VERSION, Integer.toString(versionNumberToCheck));
-		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_UP_TO_DATE_CHECK, 1, params);
-			
-		return appsBuilder.buildUpToDateCheck(appId, versionNumberToCheck, data);
+		
+		try {
+			JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_UP_TO_DATE_CHECK, 1, params);
+			return appsBuilder.buildUpToDateCheck(appId, versionNumberToCheck, data);
+        } catch(JSONException e) {
+            throw new WebApiException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
 	}
 	
 	/**
@@ -81,11 +88,15 @@ public class ISteamApps {
 	 * @throws WebApiException if there is a general service error (e.g. no key supplied)
 	 * @throws JSONException if the JSON returned from the service is malformed.
 	 */
-	public List<ServerAtAddress> getServersAtAddress(String ip) throws WebApiException, JSONException {
+	public List<ServerAtAddress> getServersAtAddress(String ip) throws WebApiException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(WebApiConstants.REQUEST_PARAM_ADDR, ip);
-		JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_SERVERS_AT_ADDRESS, 1, params);
 		
-		return appsBuilder.buildServersAtAddress(ip, data);
+		try {
+			JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_SERVERS_AT_ADDRESS, 1, params);
+			return appsBuilder.buildServersAtAddress(ip, data);
+        } catch(JSONException e) {
+            throw new WebApiException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);
+        }
 	}
 }

@@ -17,8 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
-import com.github.koraktor.steamcondenser.webapi.exceptions.DataException;
+import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameAchievement;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStat;
@@ -71,13 +72,13 @@ public class UserStatsBuilder {
 	 * @param data The response from the GetPlayerAchievements request, in JSON form.
 	 * @return An object representation of the Player Achievements of a particular user and app.
 	 * @throws ParseException if the JSON cannot be parsed as expected.
-	 * @throws DataException if an error has been returned in the response. For example, a requested app may have no stats.
+	 * @throws RequestFailedException if an error has been returned in the response. For example, a requested app may have no stats.
 	 */
-	public PlayerAchievements buildPlayerAchievements(long steamId, int appId, String language, JSONObject data) throws ParseException, DataException {
+	public PlayerAchievements buildPlayerAchievements(long steamId, int appId, String language, JSONObject data) throws WebApiException {
 		try {
 			JSONObject playerstatsObject = data.getJSONObject("playerstats");
 			if(!playerstatsObject.getBoolean("success")) {
-				throw new DataException(playerstatsObject.getString("error"));
+				throw new RequestFailedException(playerstatsObject.getString("error"));
 			}else{
 				String gameName = playerstatsObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);
 			
@@ -117,14 +118,14 @@ public class UserStatsBuilder {
 	 * @param data The response from the GetSchemaForGame request, in JSON form.
 	 * @return An object representation of the Schema for a particular game.
 	 * @throws ParseException if the JSON cannot be parsed as expected.
-	 * @throws DataException if no schema has been supplied in the response. This indicates that the game has no stats / achievements.
+	 * @throws RequestFailedException if no schema has been supplied in the response. This indicates that the game has no stats / achievements.
 	 */
-	public GameStatsSchema buildSchemaForGame(int appId, String language, JSONObject data) throws ParseException, DataException {
+	public GameStatsSchema buildSchemaForGame(int appId, String language, JSONObject data) throws WebApiException {
 		try {
 			JSONObject gameObject = data.getJSONObject("game");
 
 			if (!gameObject.has(WebApiConstants.RESPONSE_ITEM_GAME_NAME) && !gameObject.has("gameVersion")) {
-				throw new DataException(String.format("No schema for app ID %s", appId));
+				throw new RequestFailedException(String.format("No schema for app ID %s", appId));
 			}
 
 			String gameName = gameObject.getString(WebApiConstants.RESPONSE_ITEM_GAME_NAME);

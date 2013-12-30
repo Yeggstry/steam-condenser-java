@@ -26,6 +26,6 @@ public class OwnedGames {
 	}
 
 	public boolean doesPlayerOwnedGamesIncludeAppInfo() {
-		return (playerOwnedGames != null && playerOwnedGames.size() > 0 && (playerOwnedGames.get(0) instanceof OwnedGameWithAppInfo));
+		return playerOwnedGames != null && !playerOwnedGames.isEmpty() && (playerOwnedGames.get(0) instanceof OwnedGameWithAppInfo);
 	}
 }

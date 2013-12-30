@@ -59,7 +59,7 @@ public class UserStats {
      * @return a boolean that indicates if the user has any stats for this game
      */
 	public boolean hasStats() {
-		return stats.size() > 0;
+		return !stats.isEmpty();
 	}
 
     /**
@@ -68,7 +68,7 @@ public class UserStats {
      * @return a boolean that indicates if the user has any closed achievements for this game
      */
 	public boolean hasAchievements() {
-		return closedAchievements.size() > 0;
+		return !closedAchievements.isEmpty();
 	}
 
 	/**
