@@ -7,6 +7,7 @@
 
 package com.github.koraktor.steamcondenser.webapi.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -68,6 +69,18 @@ public class ISteamAppsTest {
     }
 
     @Test
+    public void testGetAppListJSONException() throws WebApiException, JSONException {
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_APP_LIST, 2, null)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamApps.getAppList();
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void testUpToDateCheck() throws JSONException, WebApiException, ParseException  {
         JSONObject upToDateCheckDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 
@@ -85,6 +98,21 @@ public class ISteamAppsTest {
     }
 
     @Test
+    public void testUpToDateCheckJSONException() throws JSONException, WebApiException, ParseException  {
+        Map<String, Object> params = new HashMap<String, Object>(); 
+        params.put("appid", Integer.toString(440));
+        params.put("version", Integer.toString(1253));
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_UP_TO_DATE_CHECK, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamApps.upToDateCheck(440, 1253);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void testGetServersAtAddress() throws JSONException, WebApiException, ParseException  {
         JSONObject getServersAtAddressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
 
@@ -98,5 +126,19 @@ public class ISteamAppsTest {
         iSteamApps.getServersAtAddress(TEST_IP);
 
         verify(appsBuilder).buildServersAtAddress(TEST_IP, getServersAtAddressDocument);
+    }
+
+    @Test
+    public void testGetServersAtAddressJSONException() throws JSONException, WebApiException, ParseException  {
+        Map<String, Object> params = new HashMap<String, Object>(); 
+        params.put("addr", TEST_IP);
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_APPS, WebApiConstants.I_STEAM_APPS_GET_SERVERS_AT_ADDRESS, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamApps.getServersAtAddress(TEST_IP);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 }

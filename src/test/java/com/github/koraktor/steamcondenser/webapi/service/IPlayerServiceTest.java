@@ -47,13 +47,13 @@ import com.github.koraktor.steamcondenser.webapi.service.IPlayerService;
 @RunWith(PowerMockRunner.class)
 public class IPlayerServiceTest {
     private static final long STEAM_ID = 12345;
-    private IPlayerService iplayerService;
+    private IPlayerService iPlayerService;
     private PlayerServiceBuilder playerServiceBuilder;
 
     @Before
     public void setup() {
         playerServiceBuilder = mock(PlayerServiceBuilder.class);
-        iplayerService = new IPlayerService(playerServiceBuilder);
+        iPlayerService = new IPlayerService(playerServiceBuilder);
         mockStatic(WebApi.class);
     }
 
@@ -76,7 +76,7 @@ public class IPlayerServiceTest {
         OwnedGames recentlyPlayedGames = mock(OwnedGames.class);
         when(playerServiceBuilder.buildRecentlyPlayedGames(recentlyPlayedGamesDocument)).thenReturn(recentlyPlayedGames);
 
-        iplayerService.getRecentlyPlayedGames(STEAM_ID, 9);
+        iPlayerService.getRecentlyPlayedGames(STEAM_ID, 9);
 
         verify(playerServiceBuilder).buildRecentlyPlayedGames(recentlyPlayedGamesDocument);
     }
@@ -93,9 +93,25 @@ public class IPlayerServiceTest {
         OwnedGames recentlyPlayedGames = mock(OwnedGames.class);
         when(playerServiceBuilder.buildRecentlyPlayedGames(recentlyPlayedGamesDocument)).thenReturn(recentlyPlayedGames);
 
-        iplayerService.getRecentlyPlayedGames(STEAM_ID);
+        iPlayerService.getRecentlyPlayedGames(STEAM_ID);
 
         verify(playerServiceBuilder).buildRecentlyPlayedGames(recentlyPlayedGamesDocument);
+    }
+
+    @Test
+    public void testGetRecentlyPlayedGamesJSONException() throws WebApiException, JSONException, IOException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("count", Integer.toString(0));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_RECENTLY_PLAYED_GAMES, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iPlayerService.getRecentlyPlayedGames(STEAM_ID);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     /* Tests for GetOwnedGames */
@@ -112,7 +128,7 @@ public class IPlayerServiceTest {
         OwnedGames playerOwnedGames = mock(OwnedGames.class);
         when(playerServiceBuilder.buildOwnedGames(ownedGamesDocument)).thenReturn(playerOwnedGames);
 
-        iplayerService.getOwnedGames(STEAM_ID);
+        iPlayerService.getOwnedGames(STEAM_ID);
 
         verify(playerServiceBuilder).buildOwnedGames(ownedGamesDocument);
     }
@@ -130,9 +146,26 @@ public class IPlayerServiceTest {
         OwnedGames playerOwnedGames = mock(OwnedGames.class);
         when(playerServiceBuilder.buildOwnedGamesWithAppInfo(ownedGamesDocument)).thenReturn(playerOwnedGames);
 
-        iplayerService.getOwnedGames(STEAM_ID, true, true);
+        iPlayerService.getOwnedGames(STEAM_ID, true, true);
 
         verify(playerServiceBuilder).buildOwnedGamesWithAppInfo(ownedGamesDocument);
+    }
+
+    @Test
+    public void testGetOwnedGamesJSONException() throws WebApiException, JSONException, IOException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("include_appinfo", new Integer(1));
+        params.put("include_played_free_games", new Integer(1));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_OWNED_GAMES, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iPlayerService.getOwnedGames(STEAM_ID, true, true);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     /* Tests for GetSteamLevel */
@@ -143,8 +176,22 @@ public class IPlayerServiceTest {
 
         when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_STEAM_LEVEL, 1, params)).thenReturn(numberOfPlayersDocument);
 
-        int playerLevel = iplayerService.getSteamLevel(STEAM_ID);
+        int playerLevel = iPlayerService.getSteamLevel(STEAM_ID);
         assertEquals(12, playerLevel);
+    }
+
+    @Test
+    public void testGetSteamLevelJSONException() throws WebApiException, JSONException, IOException {
+        Map<String, Object> params = Collections.<String,Object>singletonMap("steamid", Long.toString(STEAM_ID));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_STEAM_LEVEL, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iPlayerService.getSteamLevel(STEAM_ID);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     /* Tests for GetBadges */
@@ -159,9 +206,24 @@ public class IPlayerServiceTest {
         PlayerBadgeDetails playerBadgeDetails = mock(PlayerBadgeDetails.class);
         when(playerServiceBuilder.buildBadges(badgesDocument)).thenReturn(playerBadgeDetails);
 
-        iplayerService.getBadges(STEAM_ID);
+        iPlayerService.getBadges(STEAM_ID);
 
         verify(playerServiceBuilder).buildBadges(badgesDocument);
+    }
+
+    @Test
+    public void testGetBadgesJSONException() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_BADGES, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iPlayerService.getBadges(STEAM_ID);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     /* Tests for GetCommunityBadgeProgress */
@@ -177,12 +239,11 @@ public class IPlayerServiceTest {
         Map<Long, Boolean> communityBadgeProgress = mock(Map.class);
         when(playerServiceBuilder.buildCommunityBadgesProgress(communityBadgeProgressDocument)).thenReturn(communityBadgeProgress);
 
-        iplayerService.getCommunityBadgeProgress(STEAM_ID);
+        iPlayerService.getCommunityBadgeProgress(STEAM_ID);
 
         verify(playerServiceBuilder).buildCommunityBadgesProgress(communityBadgeProgressDocument);
     }
 
-    /* Tests for GetCommunityBadgeProgress */
     @Test
     public void testGetCommunityBadgeProgressWithBadgeId() throws WebApiException, JSONException, ParseException, RequestFailedException {
         JSONObject communityBadgeProgressDocument = new JSONObject("{ \"object\" : \"mockJSONObject\"}");
@@ -196,8 +257,24 @@ public class IPlayerServiceTest {
         Map<Long, Boolean> communityBadgeProgress = mock(Map.class);
         when(playerServiceBuilder.buildCommunityBadgesProgress(communityBadgeProgressDocument)).thenReturn(communityBadgeProgress);
 
-        iplayerService.getCommunityBadgeProgress(STEAM_ID, 8);
+        iPlayerService.getCommunityBadgeProgress(STEAM_ID, 8);
 
         verify(playerServiceBuilder).buildCommunityBadgesProgress(communityBadgeProgressDocument);
+    }
+
+    @Test
+    public void testGetCommunityBadgeProgressJSONException() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("badgeid", Integer.toString(8));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_PLAYER_SERVICE, WebApiConstants.I_PLAYER_SERVICE_GET_COMMUNITY_BADGE_PROGRESS, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iPlayerService.getCommunityBadgeProgress(STEAM_ID, 8);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 }

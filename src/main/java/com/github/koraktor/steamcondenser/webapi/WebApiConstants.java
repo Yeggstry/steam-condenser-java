@@ -1,7 +1,8 @@
 package com.github.koraktor.steamcondenser.webapi;
 
-public class WebApiConstants {
+public final class WebApiConstants {
     private WebApiConstants() {
+        throw new UnsupportedOperationException();
     }
 
     /*

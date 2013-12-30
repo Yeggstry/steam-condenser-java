@@ -88,6 +88,20 @@ public class ISteamUserStatsTest {
         verify(userStatsBuilder).buildGlobalAchievements(APPID_TF2, globalPercentagesDocument);
     }
 
+    @Test
+    public void testGlobalAchievementPercentagesJSONException() throws JSONException, WebApiException, ParseException  {
+        Map<String, Object> params = Collections.<String,Object>singletonMap("gameId", Integer.toString(APPID_TF2));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_GLOBAL_ACHIEVEMENT_PERCENTAGES_FOR_APP, 2, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamUserStats.getGlobalAchievementPercentagesForApp(APPID_TF2);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
+    }
+
 
     /* Tests for GetNumberOfCurrentPlayers */
     @Test
@@ -99,6 +113,20 @@ public class ISteamUserStatsTest {
 
         int numberOfPlayers = iSteamUserStats.getNumberOfCurrentPlayers(440);
         assertEquals(68532, numberOfPlayers);
+    }
+
+    @Test
+    public void testGetNumberOfCurrentPlayersJSONException() throws WebApiException, JSONException, IOException {
+        Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_NUMBER_OF_CURRENT_PLAYERS, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamUserStats.getNumberOfCurrentPlayers(440);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     /* Tests for GetPlayerAchievements */
@@ -154,6 +182,22 @@ public class ISteamUserStatsTest {
         verify(userStatsBuilder).buildPlayerAchievements(STEAM_ID, APPID_TF2, "", playerAchievementsDocument);
     }
 
+    @Test
+    public void testGetPlayerAchievementsJSONException() throws WebApiException, JSONException, ParseException, RequestFailedException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamUserStats.getPlayerAchievements(STEAM_ID, APPID_TF2, "");
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
+    }
+
     /* Tests for GetStatsSchemaForGame */
     @Test
     public void testGameSchemaCache() throws JSONException, SteamCondenserException  {
@@ -202,6 +246,20 @@ public class ISteamUserStatsTest {
         verify(userStatsBuilder).buildSchemaForGame(APPID_TF2, "", schemaForGameDocument);
     }
 
+    @Test
+    public void testGetSchemaForGameJSONException() throws JSONException, IOException, SteamCondenserException {
+        Map<String, Object> params = Collections.<String,Object>singletonMap("appid", Integer.toString(APPID_TF2));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamUserStats.getSchemaForGame(APPID_TF2, "");
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
+    }
+
     /* Tests for GetUserStatsForGame */
     @Test
     public void testGetUserStatsForGame() throws WebApiException, JSONException, ParseException {
@@ -239,6 +297,22 @@ public class ISteamUserStatsTest {
         iSteamUserStats.getSchemaForGame(APPID_TF2, LANG_EN);
 
         verify(userStatsBuilder, times(2)).buildSchemaForGame(APPID_TF2, LANG_EN, schemaForGameDocument);
+    }
+
+    @Test
+    public void testGetUserStatsForGameJSONException() throws WebApiException, JSONException, ParseException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("steamid", Long.toString(STEAM_ID));
+        params.put("appid", Integer.toString(APPID_TF2));
+
+        when(WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_USER_STATS_FOR_GAME, 2, params)).thenThrow(new JSONException("Error with supplied JSON."));
+
+        try {
+            iSteamUserStats.getUserStatsForGame(STEAM_ID, APPID_TF2);
+        }catch(WebApiException ex) {
+            assertEquals("Could not parse JSON data.", ex.getMessage());
+            assertEquals("Error with supplied JSON.", ex.getCause().getMessage());
+        }
     }
 
     @Test
