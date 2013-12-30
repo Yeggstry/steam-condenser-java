@@ -52,7 +52,7 @@ public class AppsBuilderTest {
 
 	@Test
 	public void testBuildAppList() throws JSONException, IOException, ParseException {
-		JSONObject appListDocument = new JSONObject(loadFileAsString("ISteamApps/getAppList.v2.json"));
+		JSONObject appListDocument = new JSONObject(loadFileAsString("ISteamApps/GetAppList.v2.json"));
 
 		Map<Long, String> appList = appsBuilder.buildAppList(appListDocument);
 
