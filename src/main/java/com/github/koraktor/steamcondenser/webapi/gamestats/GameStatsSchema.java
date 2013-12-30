@@ -54,16 +54,16 @@ public class GameStatsSchema {
 		this.stats = new HashMap<String, GameStat>(stats);
 		this.achievements = new HashMap<String, GameAchievement>(achievements);
 		
-		int visibleAchievements = 0, hiddenAchievements = 0;
+		int countOfVisibleAchievements = 0, countOfHiddenAchievements = 0;
 		for (GameAchievement achievement : this.achievements.values()) {
 			if(!achievement.isHidden()) {
-				visibleAchievements++;
+				countOfVisibleAchievements++;
 			}else{
-				hiddenAchievements++;
+				countOfHiddenAchievements++;
 			}
 		}
-		this.visibleAchievements = visibleAchievements;
-		this.hiddenAchievements = hiddenAchievements;
+		this.visibleAchievements = countOfVisibleAchievements;
+		this.hiddenAchievements = countOfHiddenAchievements;
 	}
 
     /**
@@ -99,7 +99,7 @@ public class GameStatsSchema {
      * @return a boolean that indicates if the game has any stats
      */
 	public boolean hasStats() {
-		return stats.size() > 0;
+		return !stats.isEmpty();
 	}
 
     /**
@@ -108,7 +108,7 @@ public class GameStatsSchema {
      * @return a boolean that indicates if this game has any achievements
      */
 	public boolean hasAchievements() {
-		return stats.size() > 0;
+		return !achievements.isEmpty();
 	}
 
 	/**

@@ -1,0 +1,515 @@
+{
+	"game": {
+		"gameName": "Team Fortress 2",
+		"gameVersion": "323",
+		"availableGameStats": {
+			"stats": [
+				{
+					"name": "Scout.accum.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iBuildingsDestroyed"
+				},
+				{
+					"name": "Scout.accum.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iDamageDealt"
+				},
+				{
+					"name": "Scout.accum.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iDominations"
+				},
+				{
+					"name": "Scout.accum.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iKillAssists"
+				},
+				{
+					"name": "Scout.accum.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iNumberOfKills"
+				},
+				{
+					"name": "Scout.accum.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iNumDeaths"
+				},
+				{
+					"name": "Scout.accum.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iNumInvulnerable"
+				},
+				{
+					"name": "Scout.accum.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iNumShotsFired"
+				},
+				{
+					"name": "Scout.accum.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iNumShotsHit"
+				},
+				{
+					"name": "Scout.accum.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iPlayTime"
+				},
+				{
+					"name": "Scout.accum.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iPointCaptures"
+				},
+				{
+					"name": "Scout.accum.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iPointDefenses"
+				},
+				{
+					"name": "Scout.accum.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iPointsScored"
+				},
+				{
+					"name": "Scout.accum.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Scout.accum.iRevenge"
+				},
+				{
+					"name": "Scout.max.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iBuildingsDestroyed"
+				},
+				{
+					"name": "Scout.max.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iDamageDealt"
+				},
+				{
+					"name": "Scout.max.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iDominations"
+				},
+				{
+					"name": "Scout.max.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iKillAssists"
+				},
+				{
+					"name": "Scout.max.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iNumberOfKills"
+				},
+				{
+					"name": "Scout.max.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iNumDeaths"
+				},
+				{
+					"name": "Scout.max.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iNumInvulnerable"
+				},
+				{
+					"name": "Scout.max.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iNumShotsFired"
+				},
+				{
+					"name": "Scout.max.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iNumShotsHit"
+				},
+				{
+					"name": "Scout.max.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iPlayTime"
+				},
+				{
+					"name": "Scout.max.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iPointCaptures"
+				},
+				{
+					"name": "Scout.max.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iPointDefenses"
+				},
+				{
+					"name": "Scout.max.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iPointsScored"
+				},
+				{
+					"name": "Scout.max.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Scout.max.iRevenge"
+				},
+				{
+					"name": "Soldier.accum.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iBuildingsDestroyed"
+				},
+				{
+					"name": "Soldier.accum.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iDamageDealt"
+				},
+				{
+					"name": "Soldier.accum.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iDominations"
+				},
+				{
+					"name": "Soldier.accum.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iKillAssists"
+				},
+				{
+					"name": "Soldier.accum.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iNumberOfKills"
+				},
+				{
+					"name": "Soldier.accum.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iNumDeaths"
+				},
+				{
+					"name": "Soldier.accum.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iNumInvulnerable"
+				},
+				{
+					"name": "Soldier.accum.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iNumShotsFired"
+				},
+				{
+					"name": "Soldier.accum.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iNumShotsHit"
+				},
+				{
+					"name": "Soldier.accum.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iPlayTime"
+				},
+				{
+					"name": "Soldier.accum.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iPointCaptures"
+				},
+				{
+					"name": "Soldier.accum.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iPointDefenses"
+				},
+				{
+					"name": "Soldier.accum.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iPointsScored"
+				},
+				{
+					"name": "Soldier.accum.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Soldier.accum.iRevenge"
+				},
+				{
+					"name": "Soldier.max.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iBuildingsDestroyed"
+				},
+				{
+					"name": "Soldier.max.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iDamageDealt"
+				},
+				{
+					"name": "Soldier.max.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iDominations"
+				},
+				{
+					"name": "Soldier.max.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iKillAssists"
+				},
+				{
+					"name": "Soldier.max.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iNumberOfKills"
+				},
+				{
+					"name": "Soldier.max.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iNumDeaths"
+				},
+				{
+					"name": "Soldier.max.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iNumInvulnerable"
+				},
+				{
+					"name": "Soldier.max.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iNumShotsFired"
+				},
+				{
+					"name": "Soldier.max.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iNumShotsHit"
+				},
+				{
+					"name": "Soldier.max.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iPlayTime"
+				},
+				{
+					"name": "Soldier.max.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iPointCaptures"
+				},
+				{
+					"name": "Soldier.max.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iPointDefenses"
+				},
+				{
+					"name": "Soldier.max.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iPointsScored"
+				},
+				{
+					"name": "Soldier.max.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Soldier.max.iRevenge"
+				},
+				{
+					"name": "Spy.accum.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iBuildingsDestroyed"
+				},
+				{
+					"name": "Spy.accum.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iDamageDealt"
+				},
+				{
+					"name": "Spy.accum.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iDominations"
+				},
+				{
+					"name": "Spy.accum.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iKillAssists"
+				},
+				{
+					"name": "Spy.accum.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iNumberOfKills"
+				},
+				{
+					"name": "Spy.accum.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iNumDeaths"
+				},
+				{
+					"name": "Spy.accum.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iNumInvulnerable"
+				},
+				{
+					"name": "Spy.accum.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iNumShotsFired"
+				},
+				{
+					"name": "Spy.accum.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iNumShotsHit"
+				},
+				{
+					"name": "Spy.accum.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iPlayTime"
+				},
+				{
+					"name": "Spy.accum.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iPointCaptures"
+				},
+				{
+					"name": "Spy.accum.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iPointDefenses"
+				},
+				{
+					"name": "Spy.accum.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iPointsScored"
+				},
+				{
+					"name": "Spy.accum.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Spy.accum.iRevenge"
+				},
+				{
+					"name": "Spy.max.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iBuildingsDestroyed"
+				},
+				{
+					"name": "Spy.max.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iDamageDealt"
+				},
+				{
+					"name": "Spy.max.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iDominations"
+				},
+				{
+					"name": "Spy.max.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iKillAssists"
+				},
+				{
+					"name": "Spy.max.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iNumberOfKills"
+				},
+				{
+					"name": "Spy.max.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iNumDeaths"
+				},
+				{
+					"name": "Spy.max.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iNumInvulnerable"
+				},
+				{
+					"name": "Spy.max.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iNumShotsFired"
+				},
+				{
+					"name": "Spy.max.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iNumShotsHit"
+				},
+				{
+					"name": "Spy.max.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iPlayTime"
+				},
+				{
+					"name": "Spy.max.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iPointCaptures"
+				},
+				{
+					"name": "Spy.max.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iPointDefenses"
+				},
+				{
+					"name": "Spy.max.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iPointsScored"
+				},
+				{
+					"name": "Spy.max.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Spy.max.iRevenge"
+				},
+				{
+					"name": "Pyro.accum.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iBuildingsDestroyed"
+				},
+				{
+					"name": "Pyro.accum.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iDamageDealt"
+				},
+				{
+					"name": "Pyro.accum.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iDominations"
+				},
+				{
+					"name": "Pyro.accum.iKillAssists",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iKillAssists"
+				},
+				{
+					"name": "Pyro.accum.iNumberOfKills",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iNumberOfKills"
+				},
+				{
+					"name": "Pyro.accum.iNumDeaths",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iNumDeaths"
+				},
+				{
+					"name": "Pyro.accum.iNumInvulnerable",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iNumInvulnerable"
+				},
+				{
+					"name": "Pyro.accum.iNumShotsFired",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iNumShotsFired"
+				},
+				{
+					"name": "Pyro.accum.iNumShotsHit",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iNumShotsHit"
+				},
+				{
+					"name": "Pyro.accum.iPlayTime",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iPlayTime"
+				},
+				{
+					"name": "Pyro.accum.iPointCaptures",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iPointCaptures"
+				},
+				{
+					"name": "Pyro.accum.iPointDefenses",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iPointDefenses"
+				},
+				{
+					"name": "Pyro.accum.iPointsScored",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iPointsScored"
+				},
+				{
+					"name": "Pyro.accum.iRevenge",
+					"defaultvalue": 0,
+					"displayName": "Pyro.accum.iRevenge"
+				},
+				{
+					"name": "Pyro.max.iBuildingsDestroyed",
+					"defaultvalue": 0,
+					"displayName": "Pyro.max.iBuildingsDestroyed"
+				},
+				{
+					"name": "Pyro.max.iDamageDealt",
+					"defaultvalue": 0,
+					"displayName": "Pyro.max.iDamageDealt"
+				},
+				{
+					"name": "Pyro.max.iDominations",
+					"defaultvalue": 0,
+					"displayName": "Pyro.max.iDominations"
+				}
+			]
+		}
+	}
+}
