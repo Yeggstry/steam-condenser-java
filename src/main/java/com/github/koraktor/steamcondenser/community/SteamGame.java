@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -314,7 +316,7 @@ public class SteamGame {
     /**
      * Returns whether this game has statistics available
      *
-     * @return <code>true</code if this game has stats
+     * @return <code>true</code> if this game has stats
      */
     public boolean hasStats() {
         return this.shortName != null;
@@ -331,6 +333,15 @@ public class SteamGame {
     public boolean isUpToDate(int version)
             throws JSONException, SteamCondenserException {
         return SteamGame.isUpToDate(this.appId, version);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("appId", this.appId)
+            .append("name", this.name)
+            .append("shortName", this.shortName)
+            .toString();
     }
 
 }

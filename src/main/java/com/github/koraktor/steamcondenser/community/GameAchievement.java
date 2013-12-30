@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -182,6 +184,18 @@ public class GameAchievement {
      */
     public boolean isUnlocked() {
         return this.unlocked;
+    }
+
+    @Override
+    public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("apiName", this.apiName)
+        .append("name", this.name)
+        .append("unlocked", this.unlocked)
+        .append("timestamp", this.timestamp)
+        .append("user", this.user)
+        .append("game", this.game)
+        .toString();
     }
 
 }

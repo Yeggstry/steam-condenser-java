@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +42,7 @@ public class SteamId {
     private long fetchTime;
     private List<SteamId> friends;
     private HashMap<Integer, SteamGame> games;
-    private SteamGroup[] groups;
+    private List<SteamGroup> groups;
     private String headLine;
     private float hoursPlayed;
     private String imageUrl;
@@ -378,10 +380,10 @@ public class SteamId {
                 }
 
                 List<XMLData> groupElements = profile.getElements("groups", "group");
-                this.groups = new SteamGroup[groupElements.size()];
-                for(int i = 0; i < this.groups.length; i++) {
+                this.groups = new ArrayList<SteamGroup>(groupElements.size());
+                for(int i = 0; i < this.groups.size(); i++) {
                     XMLData group = groupElements.get(i);
-                    this.groups[i] = SteamGroup.create(group.getLong("groupID64"), false);
+                    this.groups.add(SteamGroup.create(group.getLong("groupID64"), false));
                 }
 
                 this.links = new HashMap<String, String>();
@@ -599,7 +601,7 @@ public class SteamId {
      *
      * @return The groups this user is a member of
      */
-    public SteamGroup[] getGroups() {
+    public List<SteamGroup> getGroups() {
         return this.groups;
     }
 
@@ -855,7 +857,7 @@ public class SteamId {
      * @return <code>true</code> if the user is in-game
      */
     public boolean isInGame() {
-        return this.onlineState.equals("in-game");
+        return this.onlineState != null && this.onlineState.equals("in-game");
     }
 
     /**
@@ -874,6 +876,17 @@ public class SteamId {
      * @return <code>true</code> if the user is online
      */
     public boolean isOnline() {
-        return (this.onlineState.equals("online") || this.onlineState.equals("in-game"));
+        return this.onlineState != null &&
+                (this.onlineState.equals("online") || this.onlineState.equals("in-game"));
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("steamId64", this.steamId64)
+            .append("vanityUrl", this.customUrl)
+            .append("nickname", this.nickname)
+            .append("online", this.isOnline())
+            .toString();
     }
 }
