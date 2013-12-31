@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
+import com.github.koraktor.steamcondenser.webapi.WebApiLanguage;
 import com.github.koraktor.steamcondenser.webapi.builder.UserStatsBuilder;
 import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
@@ -92,11 +93,11 @@ public class UserStatsBuilderTest {
     public void testBuildPlayerAchievements() throws JSONException, IOException, WebApiException {
         JSONObject playerAchievementsDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetPlayerAchievements.v1.json"));
 
-        PlayerAchievements playerAchievements = userStatsBuilder.buildPlayerAchievements(12345, 440, "en", playerAchievementsDocument);
+        PlayerAchievements playerAchievements = userStatsBuilder.buildPlayerAchievements(12345, 440, WebApiLanguage.ENGLISH, playerAchievementsDocument);
 
         assertEquals(12345L, playerAchievements.getSteamId());
         assertEquals(440, playerAchievements.getAppId());
-        assertEquals("en", playerAchievements.getLanguage());
+        assertEquals(WebApiLanguage.ENGLISH, playerAchievements.getLanguage());
         assertEquals("Left 4 Dead 2", playerAchievements.getGameName());
         assertEquals(64, playerAchievements.getClosedAchievements().size());
         assertEquals(5, playerAchievements.getOpenAchievements().size());
@@ -113,7 +114,7 @@ public class UserStatsBuilderTest {
         JSONObject playerAchievementsDocument = new JSONObject("{ \"playerstats\": { \"error\": \"Requested app has no stats\", \"success\": false } }");
 
         try {
-            userStatsBuilder.buildPlayerAchievements(12345, 48240, "en", playerAchievementsDocument);
+            userStatsBuilder.buildPlayerAchievements(12345, 48240, WebApiLanguage.ENGLISH, playerAchievementsDocument);
             fail("Exception should be thrown when calling getPlayerAchievements with an invalid appId.");
         } catch (RequestFailedException e) {
             assertEquals("Requested app has no stats", e.getMessage());
@@ -127,7 +128,7 @@ public class UserStatsBuilderTest {
         JSONObject playerAchievementsDocument = new JSONObject("{ \"playerstats\": { \"success\": true } }");
 
         try {
-            userStatsBuilder.buildPlayerAchievements(12345, 48240, "en", playerAchievementsDocument);
+            userStatsBuilder.buildPlayerAchievements(12345, 48240, WebApiLanguage.ENGLISH, playerAchievementsDocument);
             fail("Exception should be thrown when calling getPlayerAchievements with invalid JSON.");
         } catch (Exception e) {
             assertEquals("Could not parse JSON data.", e.getMessage());
@@ -138,10 +139,10 @@ public class UserStatsBuilderTest {
     public void testBuildSchemaForGame() throws JSONException, IOException, SteamCondenserException {
         JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.v2.json"));
 
-        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
 
         assertEquals(440, gameStatsSchema.getAppId());
-        assertEquals("en", gameStatsSchema.getLanguage());
+        assertEquals(WebApiLanguage.ENGLISH, gameStatsSchema.getLanguage());
         assertEquals("Team Fortress 2", gameStatsSchema.getGameName());
         assertEquals(323, gameStatsSchema.getGameVersion());
         assertTrue(gameStatsSchema.hasAchievements());
@@ -176,7 +177,7 @@ public class UserStatsBuilderTest {
     public void testBuildSchemaForGameNoStats() throws JSONException, IOException, SteamCondenserException {
         JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.NoStats.v2.json"));
 
-        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
 
         assertTrue(gameStatsSchema.hasAchievements());
         assertFalse(gameStatsSchema.hasStats());
@@ -186,7 +187,7 @@ public class UserStatsBuilderTest {
     public void testBuildSchemaForGameNoAchievements() throws JSONException, IOException, SteamCondenserException {
         JSONObject schemaForGameDocument = new JSONObject(loadFileAsString("ISteamUserStats/GetSchemaForGame.NoAchievements.v2.json"));
 
-        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
 
         assertFalse(gameStatsSchema.hasAchievements());
         assertTrue(gameStatsSchema.hasStats());
@@ -196,7 +197,7 @@ public class UserStatsBuilderTest {
     public void testBuildSchemaForGameNoStatsOrAchievements() throws JSONException, IOException, SteamCondenserException {
         JSONObject schemaForGameDocument = new JSONObject("{ \"game\": { \"gameName\": \"testGameName\", \"gameVersion\": 1, \"availableGameStats\": { } } }");
 
-        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+        GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
 
         assertFalse(gameStatsSchema.hasAchievements());
         assertFalse(gameStatsSchema.hasStats());
@@ -207,7 +208,7 @@ public class UserStatsBuilderTest {
         JSONObject schemaForGameDocument = new JSONObject("{ \"game\": { } }");
 
         try {
-            userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+            userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
         } catch (Exception e) {
             assertEquals("No schema for app ID 440", e.getMessage());
         }
@@ -218,7 +219,7 @@ public class UserStatsBuilderTest {
         JSONObject schemaForGameDocument = new JSONObject("{ \"game\": { \"gameName\": \"myGameNameWithoutVersion\" } }");
 
         try {
-            userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+            userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
             fail("Exception should be thrown when calling getSchemaForGame with invalid JSON.");
         } catch (Exception e) {
             assertEquals("Could not parse JSON data.", e.getMessage());
@@ -230,7 +231,7 @@ public class UserStatsBuilderTest {
         JSONObject schemaForGameDocument = new JSONObject("{ \"game\": { \"gameVersion\": 12345 } }");
 
         try {
-            userStatsBuilder.buildSchemaForGame(440, "en", schemaForGameDocument);
+            userStatsBuilder.buildSchemaForGame(440, WebApiLanguage.ENGLISH, schemaForGameDocument);
             fail("Exception should be thrown when calling getSchemaForGame with invalid JSON.");
         } catch (Exception e) {
             assertEquals("Could not parse JSON data.", e.getMessage());

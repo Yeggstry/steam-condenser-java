@@ -17,6 +17,7 @@ import com.github.koraktor.steamcondenser.community.WebApi;
 import com.github.koraktor.steamcondenser.exceptions.SteamCondenserException;
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
+import com.github.koraktor.steamcondenser.webapi.WebApiLanguage;
 import com.github.koraktor.steamcondenser.webapi.builder.UserStatsBuilder;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameStatsSchema;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GlobalAchievements;
@@ -31,7 +32,7 @@ import com.github.koraktor.steamcondenser.webapi.userstats.UserStats;
  */
 public class ISteamUserStats {
     private final UserStatsBuilder userStatsBuilder;
-    private Map<Integer, GameStatsSchema> gameStatsSchemasCache = new HashMap<Integer, GameStatsSchema>();
+    private Map<String, GameStatsSchema> gameStatsSchemasCache = new HashMap<String, GameStatsSchema>();
     private Map<Integer, GlobalAchievements> globalAchievementPercentagesForAppCache = new HashMap<Integer, GlobalAchievements>();
 
     /**
@@ -124,13 +125,15 @@ public class ISteamUserStats {
      * @throws WebApiException if there is a general service error (e.g. no key supplied)
      * @throws JSONException if the JSON returned from the service is malformed.
      */
-    public PlayerAchievements getPlayerAchievements(long steamId, int appId, String language) throws WebApiException {
+    public PlayerAchievements getPlayerAchievements(long steamId, int appId, WebApiLanguage language) throws WebApiException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(WebApiConstants.REQUEST_PARAM_STEAM_ID, Long.toString(steamId));
         params.put(WebApiConstants.APP_ID, Integer.toString(appId));
-        if (language != null && language.length() > 0) {
-            params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language);
+        //default to english if a language is not provided.
+        if (language == null) {
+            language = WebApiLanguage.ENGLISH;
         }
+        params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language);
 
         try {
             JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_PLAYER_ACHIEVEMENTS, 1, params);
@@ -141,7 +144,7 @@ public class ISteamUserStats {
     }
 
     /**
-     * Retrieves details of all stats and achievements for a particular game.
+     * Retrieves details of all stats and achievements for a particular game. All tokenized strings will be returned in english.
      * 
      * @param appId The unique Steam Application ID of the game (e.g.
      *        <code>440</code> for Team Fortress 2). See
@@ -152,7 +155,7 @@ public class ISteamUserStats {
      * @throws SteamCondenserException if there is a general service error (e.g. no key supplied), or if 
      *         there is no stats or achievements for this game.
      */
-    public GameStatsSchema getSchemaForGame(int appId) throws SteamCondenserException {
+    public GameStatsSchema getSchemaForGame(int appId) throws WebApiException {
         return getSchemaForGame(appId, null);
     }
 
@@ -163,27 +166,31 @@ public class ISteamUserStats {
      *        <code>440</code> for Team Fortress 2). See
      *        http://developer.valvesoftware.com/wiki/Steam_Application_IDs for
      *        all application IDs
-     * @param language The ISO639-1 language code for the language all tokenized strings should be returned in, or English if not provided.
+     * @param language The language which all tokenized strings should be returned in if available, or english if not provided.
      * @return An object which contains all stats and achievements for a particular game.
      * @throws WebApiException 
      * @throws JSONException if the JSON returned from the service is malformed.
      * @throws SteamCondenserException if there is a general service error (e.g. no key supplied), or if 
      *         there is no stats or achievements for this game.
      */
-    public GameStatsSchema getSchemaForGame(int appId, String language) throws WebApiException  {
-        if (gameStatsSchemasCache.containsKey(appId)) {
-            return gameStatsSchemasCache.get(appId);
+    public GameStatsSchema getSchemaForGame(int appId, WebApiLanguage language) throws WebApiException  {
+        //default to english if a language is not provided.
+        if (language == null) {
+            language = WebApiLanguage.ENGLISH;
+        }
+
+        String appLanguageKey = appId + "-" + language.getUrlLanguageString();
+        if (gameStatsSchemasCache.containsKey(appLanguageKey)) {
+            return gameStatsSchemasCache.get(appLanguageKey);
         } else {
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put(WebApiConstants.APP_ID, Integer.toString(appId));
-            if (language != null && language.length() > 0) {
-                params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language);
-            }
+            params.put(WebApiConstants.REQUEST_PARAM_LANGUAGE, language.getUrlLanguageString());
 
             try {
                 JSONObject data = WebApi.getJSONResponse(WebApiConstants.I_STEAM_USER_STATS, WebApiConstants.I_STEAM_USER_STATS_GET_SCHEMA_FOR_GAME, 2, params);
                 GameStatsSchema gameStatsSchema = userStatsBuilder.buildSchemaForGame(appId, language, data);
-                gameStatsSchemasCache.put(appId, gameStatsSchema);
+                gameStatsSchemasCache.put(appLanguageKey, gameStatsSchema);
                 return gameStatsSchema;
             } catch(JSONException e) {
                 throw new WebApiException(WebApiConstants.ERR_COULD_NOT_PARSE_JSON_DATA, e);

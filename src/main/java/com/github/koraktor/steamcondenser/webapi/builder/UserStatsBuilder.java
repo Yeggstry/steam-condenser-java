@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.github.koraktor.steamcondenser.exceptions.WebApiException;
 import com.github.koraktor.steamcondenser.webapi.WebApiConstants;
+import com.github.koraktor.steamcondenser.webapi.WebApiLanguage;
 import com.github.koraktor.steamcondenser.webapi.exceptions.ParseException;
 import com.github.koraktor.steamcondenser.webapi.exceptions.RequestFailedException;
 import com.github.koraktor.steamcondenser.webapi.gamestats.GameAchievement;
@@ -74,7 +75,7 @@ public class UserStatsBuilder {
      * @throws ParseException if the JSON cannot be parsed as expected.
      * @throws RequestFailedException if an error has been returned in the response. For example, a requested app may have no stats.
      */
-    public PlayerAchievements buildPlayerAchievements(long steamId, int appId, String language, JSONObject data) throws WebApiException {
+    public PlayerAchievements buildPlayerAchievements(long steamId, int appId, WebApiLanguage language, JSONObject data) throws WebApiException {
         try {
             JSONObject playerstatsObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_PLAYER_STATS);
             if(!playerstatsObject.getBoolean(WebApiConstants.RESPONSE_ITEM_SUCCESS)) {
@@ -114,13 +115,13 @@ public class UserStatsBuilder {
      *        <code>440</code> for Team Fortress 2). See
      *        http://developer.valvesoftware.com/wiki/Steam_Application_IDs for
      *        all application IDs
-     * @param language The ISO639-1 language code for the language all tokenized strings should be returned in, or English if not provided.
+     * @param language The language which all tokenized strings should be returned in if available, or english if not provided.
      * @param data The response from the GetSchemaForGame request, in JSON form.
      * @return An object representation of the Schema for a particular game.
      * @throws ParseException if the JSON cannot be parsed as expected.
      * @throws RequestFailedException if no schema has been supplied in the response. This indicates that the game has no stats / achievements.
      */
-    public GameStatsSchema buildSchemaForGame(int appId, String language, JSONObject data) throws WebApiException {
+    public GameStatsSchema buildSchemaForGame(int appId, WebApiLanguage language, JSONObject data) throws WebApiException {
         try {
             JSONObject gameObject = data.getJSONObject(WebApiConstants.RESPONSE_ITEM_GAME);
 

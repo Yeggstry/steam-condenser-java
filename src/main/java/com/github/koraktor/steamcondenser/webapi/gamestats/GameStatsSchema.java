@@ -10,6 +10,8 @@ package com.github.koraktor.steamcondenser.webapi.gamestats;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.koraktor.steamcondenser.webapi.WebApiLanguage;
+
 /**
  * A object which contains all game stats and achievements for a particular game.
  * This data has been retrieved from the GetGameStatsSchema operation in the ISteamUserStats Web API service.
@@ -21,7 +23,7 @@ public class GameStatsSchema {
 
     private final int appId;
 
-    private final String language;
+    private final WebApiLanguage language;
 
     private final String gameName;
 
@@ -40,13 +42,13 @@ public class GameStatsSchema {
      *        <code>440</code> for Team Fortress 2). See
      *        http://developer.valvesoftware.com/wiki/Steam_Application_IDs for
      *        all application IDs
-     * @param language The ISO639-1 language code for the language all tokenized strings should be returned in, or English if not provided.
+     * @param language The language which all tokenized strings should be returned in if available, or english if not provided.
      * @param gameName The full name of this app
      * @param gameVersion The version of this app
      * @param stats A map of stats for this app.
      * @param achievements A map of user achievements for this app.
      */
-    public GameStatsSchema(int appId, String language, String gameName, int gameVersion, Map<String, GameStat> stats, Map<String, GameAchievement> achievements) {
+    public GameStatsSchema(int appId, WebApiLanguage language, String gameName, int gameVersion, Map<String, GameStat> stats, Map<String, GameAchievement> achievements) {
         this.appId = appId;
         this.language = language;
         this.gameName = gameName;
@@ -150,11 +152,11 @@ public class GameStatsSchema {
     }
 
     /**
-     * Returns the ISO639-1 language for the achievements.
+     * Returns the language which all tokenized strings should be returned in if available.
      * 
-     * @return the ISO639-1 language for the achievements.
+     * @return the language which all tokenized strings should be returned in if available.
      */
-    public String getLanguage() {
+    public WebApiLanguage getLanguage() {
         return language;
     }
 

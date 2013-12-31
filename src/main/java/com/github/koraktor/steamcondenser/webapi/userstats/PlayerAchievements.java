@@ -10,6 +10,8 @@ package com.github.koraktor.steamcondenser.webapi.userstats;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.koraktor.steamcondenser.webapi.WebApiLanguage;
+
 /**
  * A object which contains all player achievements for a particular game.
  * This data has been retrieved from the GetPlayerAchievements operation in the ISteamUserStats Web API service.
@@ -23,7 +25,7 @@ public class PlayerAchievements {
     private final long steamId;
     private final int appId;
 
-    private final String language;
+    private final WebApiLanguage language;
 
     private final List<String> openAchievements;
     private final List<String> closedAchievements;
@@ -41,7 +43,7 @@ public class PlayerAchievements {
      * @param openAchievements a list of achievement keys that the user has not achieved for this game.
      * @param closedAchievements a list of achievement keys that the user has achieved for this game.
      */
-    public PlayerAchievements(long steamId, int appId, String language, String gameName, List<String> openAchievements, List<String> closedAchievements) {
+    public PlayerAchievements(long steamId, int appId, WebApiLanguage language, String gameName, List<String> openAchievements, List<String> closedAchievements) {
         this.steamId = steamId;
         this.appId = appId;
         this.gameName = gameName;
@@ -96,11 +98,11 @@ public class PlayerAchievements {
     }
 
     /**
-     * Returns the ISO639-1 language for the achievements.
+     * Returns the language which all tokenized strings should be returned in if available.
      * 
-     * @return the ISO639-1 language for the achievements.
+     * @return the language which all tokenized strings should be returned in if available.
      */
-    public String getLanguage() {
+    public WebApiLanguage getLanguage() {
         return language;
     }
 }
